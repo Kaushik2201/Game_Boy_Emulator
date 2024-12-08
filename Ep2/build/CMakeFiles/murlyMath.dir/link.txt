@@ -1,0 +1,2 @@
+C:\msys64\ucrt64\bin\ar.exe qc libmurlyMath.a CMakeFiles/murlyMath.dir/SomeLib/cpp/adder.cpp.obj
+C:\msys64\ucrt64\bin\ranlib.exe libmurlyMath.a
