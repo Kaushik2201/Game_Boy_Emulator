@@ -1,0 +1,10 @@
+^C:\USERS\RAHUL\DESKTOP\MY CODE\IE CODE PROJECT\GAME_BOY_EMULATOR\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator" "-BC:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/build" --check-stamp-file "C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/build/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
