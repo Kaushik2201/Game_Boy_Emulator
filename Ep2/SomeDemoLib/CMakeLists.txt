@@ -1,5 +1,0 @@
-cmake_minimum_required(VERSION 3.13)
-project(SomeDemoLib)
-add_executable(SomeDemoLib src/test2.cpp)
-target_link_directories(SomeDemoLib PRIVATE ${CMAKE_SOURCE_DIR/../../Ep2/build/})
-target_link_libraries(SomeDemoLib ${CMAKE_SOURCE_DIR}/../build/Release/)

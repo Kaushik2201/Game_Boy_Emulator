@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\rahul\Desktop\My Code\IE CODE PROJECT\Game_Boy_Emulator\ep2\SomeLib\cpp\adder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\rahul\Desktop\My Code\IE CODE PROJECT\Game_Boy_Emulator\ep2\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{220B5C3A-1E75-35BC-985A-14FD1E4211D2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

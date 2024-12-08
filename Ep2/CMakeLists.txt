@@ -1,4 +1,3 @@
-cmake_minimum_required(VERSION 2.8)
-project(test1)
-add_library(test1 some1.cpp)
-
+cmake_minimum_required(VERSION 3.13)
+project(murlyMath)
+add_library(murlyMath SomeLib/cpp/adder.cpp)

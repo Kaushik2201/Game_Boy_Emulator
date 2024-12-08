@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <CustomBuild Include="C:\Users\rahul\Desktop\My Code\IE CODE PROJECT\Game_Boy_Emulator\Ep2\build\CMakeFiles\5e178fecf1ebac249184649532b4fdcf\generate.stamp.rule">
+    <CustomBuild Include="C:\Users\rahul\Desktop\My Code\IE CODE PROJECT\Game_Boy_Emulator\ep2\build\CMakeFiles\f629ced4b8773fc0a41d1eb2b8d8566b\generate.stamp.rule">
       <Filter>CMake Rules</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="CMake Rules">
-      <UniqueIdentifier>{B67C45DA-F38B-3467-8745-0E60767FCB8E}</UniqueIdentifier>
+      <UniqueIdentifier>{578D3703-AA48-3BAE-922A-60686F0594F0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -24,9 +24,9 @@ events:
       The output was:
       0
       MSBuild version 17.7.2+d6990bcfa for .NET Framework
-      Build started 08/12/2024 16:59:25.
+      Build started 08/12/2024 19:03:34.
       
-      Project "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\Ep2\\build\\CMakeFiles\\3.31.2\\CompilerIdC\\CompilerIdC.vcxproj" on node 1 (default targets).
+      Project "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\ep2\\build\\CMakeFiles\\3.31.2\\CompilerIdC\\CompilerIdC.vcxproj" on node 1 (default targets).
       PrepareForBuild:
         Creating directory "Debug\\".
         Creating directory "Debug\\CompilerIdC.tlog\\".
@@ -38,7 +38,7 @@ events:
         CMakeCCompilerId.c
       Link:
         C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdC.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdC.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdC.lib" /MACHINE:X64 Debug\\CMakeCCompilerId.obj
-        CompilerIdC.vcxproj -> C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\Ep2\\build\\CMakeFiles\\3.31.2\\CompilerIdC\\CompilerIdC.exe
+        CompilerIdC.vcxproj -> C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\ep2\\build\\CMakeFiles\\3.31.2\\CompilerIdC\\CompilerIdC.exe
       PostBuildEvent:
         for %%i in (cl.exe) do @echo CMAKE_C_COMPILER=%%~$PATH:i
         :VCEnd
@@ -46,13 +46,13 @@ events:
       FinalizeBuildStatus:
         Deleting file "Debug\\CompilerIdC.tlog\\unsuccessfulbuild".
         Touching "Debug\\CompilerIdC.tlog\\CompilerIdC.lastbuildstate".
-      Done Building Project "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\Ep2\\build\\CMakeFiles\\3.31.2\\CompilerIdC\\CompilerIdC.vcxproj" (default targets).
+      Done Building Project "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\ep2\\build\\CMakeFiles\\3.31.2\\CompilerIdC\\CompilerIdC.vcxproj" (default targets).
       
       Build succeeded.
           0 Warning(s)
           0 Error(s)
       
-      Time Elapsed 00:00:00.57
+      Time Elapsed 00:00:00.66
       
       
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
@@ -60,7 +60,7 @@ events:
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.vcxproj"
       
       The C compiler identification is MSVC, found in:
-        C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/Ep2/build/CMakeFiles/3.31.2/CompilerIdC/CompilerIdC.exe
+        C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/ep2/build/CMakeFiles/3.31.2/CompilerIdC/CompilerIdC.exe
       
   -
     kind: "message-v1"
@@ -78,9 +78,9 @@ events:
       The output was:
       0
       MSBuild version 17.7.2+d6990bcfa for .NET Framework
-      Build started 08/12/2024 16:59:26.
+      Build started 08/12/2024 19:03:34.
       
-      Project "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\Ep2\\build\\CMakeFiles\\3.31.2\\CompilerIdCXX\\CompilerIdCXX.vcxproj" on node 1 (default targets).
+      Project "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\ep2\\build\\CMakeFiles\\3.31.2\\CompilerIdCXX\\CompilerIdCXX.vcxproj" on node 1 (default targets).
       PrepareForBuild:
         Creating directory "Debug\\".
         Creating directory "Debug\\CompilerIdCXX.tlog\\".
@@ -92,7 +92,7 @@ events:
         CMakeCXXCompilerId.cpp
       Link:
         C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:".\\CompilerIdCXX.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:".\\CompilerIdCXX.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:".\\CompilerIdCXX.lib" /MACHINE:X64 Debug\\CMakeCXXCompilerId.obj
-        CompilerIdCXX.vcxproj -> C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\Ep2\\build\\CMakeFiles\\3.31.2\\CompilerIdCXX\\CompilerIdCXX.exe
+        CompilerIdCXX.vcxproj -> C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\ep2\\build\\CMakeFiles\\3.31.2\\CompilerIdCXX\\CompilerIdCXX.exe
       PostBuildEvent:
         for %%i in (cl.exe) do @echo CMAKE_CXX_COMPILER=%%~$PATH:i
         :VCEnd
@@ -100,13 +100,13 @@ events:
       FinalizeBuildStatus:
         Deleting file "Debug\\CompilerIdCXX.tlog\\unsuccessfulbuild".
         Touching "Debug\\CompilerIdCXX.tlog\\CompilerIdCXX.lastbuildstate".
-      Done Building Project "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\Ep2\\build\\CMakeFiles\\3.31.2\\CompilerIdCXX\\CompilerIdCXX.vcxproj" (default targets).
+      Done Building Project "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\ep2\\build\\CMakeFiles\\3.31.2\\CompilerIdCXX\\CompilerIdCXX.vcxproj" (default targets).
       
       Build succeeded.
           0 Warning(s)
           0 Error(s)
       
-      Time Elapsed 00:00:00.42
+      Time Elapsed 00:00:00.55
       
       
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -114,7 +114,7 @@ events:
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.vcxproj"
       
       The CXX compiler identification is MSVC, found in:
-        C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/Ep2/build/CMakeFiles/3.31.2/CompilerIdCXX/CompilerIdCXX.exe
+        C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/ep2/build/CMakeFiles/3.31.2/CompilerIdCXX/CompilerIdCXX.exe
       
   -
     kind: "try_compile-v1"
@@ -125,47 +125,49 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/Ep2/build/CMakeFiles/CMakeScratch/TryCompile-884puu"
-      binary: "C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/Ep2/build/CMakeFiles/CMakeScratch/TryCompile-884puu"
+      source: "C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/ep2/build/CMakeFiles/CMakeScratch/TryCompile-n926qi"
+      binary: "C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/ep2/build/CMakeFiles/CMakeScratch/TryCompile-n926qi"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
+      CMAKE_C_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
     buildResult:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/Ep2/build/CMakeFiles/CMakeScratch/TryCompile-884puu'
+        Change Dir: 'C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/ep2/build/CMakeFiles/CMakeScratch/TryCompile-n926qi'
         
-        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_a9fc2.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_0e7fb.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.7.2+d6990bcfa for .NET Framework
-        Build started 08/12/2024 16:59:27.
+        Build started 08/12/2024 19:03:36.
         
-        Project "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\Ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-884puu\\cmTC_a9fc2.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-n926qi\\cmTC_0e7fb.vcxproj" on node 1 (default targets).
         PrepareForBuild:
-          Creating directory "cmTC_a9fc2.dir\\Debug\\".
-          Creating directory "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\Ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-884puu\\Debug\\".
-          Creating directory "cmTC_a9fc2.dir\\Debug\\cmTC_a9fc2.tlog\\".
+          Creating directory "cmTC_0e7fb.dir\\Debug\\".
+          Creating directory "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-n926qi\\Debug\\".
+          Creating directory "cmTC_0e7fb.dir\\Debug\\cmTC_0e7fb.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_a9fc2.dir\\Debug\\cmTC_a9fc2.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_a9fc2.dir\\Debug\\cmTC_a9fc2.tlog\\unsuccessfulbuild".
+          Creating "cmTC_0e7fb.dir\\Debug\\cmTC_0e7fb.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_0e7fb.dir\\Debug\\cmTC_0e7fb.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_a9fc2.dir\\Debug\\\\" /Fd"cmTC_a9fc2.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_0e7fb.dir\\Debug\\\\" /Fd"cmTC_0e7fb.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.37.32825 for x64
-          Copyright (C) Microsoft Corporation.  All rights reserved.
           CMakeCCompilerABI.c
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_a9fc2.dir\\Debug\\\\" /Fd"cmTC_a9fc2.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
+          Copyright (C) Microsoft Corporation.  All rights reserved.
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_0e7fb.dir\\Debug\\\\" /Fd"cmTC_0e7fb.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCCompilerABI.c"
         Link:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\Ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-884puu\\Debug\\cmTC_a9fc2.exe" /INCREMENTAL /ILK:"cmTC_a9fc2.dir\\Debug\\cmTC_a9fc2.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/Ep2/build/CMakeFiles/CMakeScratch/TryCompile-884puu/Debug/cmTC_a9fc2.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/Ep2/build/CMakeFiles/CMakeScratch/TryCompile-884puu/Debug/cmTC_a9fc2.lib" /MACHINE:X64  /machine:x64 cmTC_a9fc2.dir\\Debug\\CMakeCCompilerABI.obj
-          cmTC_a9fc2.vcxproj -> C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\Ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-884puu\\Debug\\cmTC_a9fc2.exe
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-n926qi\\Debug\\cmTC_0e7fb.exe" /INCREMENTAL /ILK:"cmTC_0e7fb.dir\\Debug\\cmTC_0e7fb.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/ep2/build/CMakeFiles/CMakeScratch/TryCompile-n926qi/Debug/cmTC_0e7fb.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/ep2/build/CMakeFiles/CMakeScratch/TryCompile-n926qi/Debug/cmTC_0e7fb.lib" /MACHINE:X64  /machine:x64 cmTC_0e7fb.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_0e7fb.vcxproj -> C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-n926qi\\Debug\\cmTC_0e7fb.exe
         FinalizeBuildStatus:
-          Deleting file "cmTC_a9fc2.dir\\Debug\\cmTC_a9fc2.tlog\\unsuccessfulbuild".
-          Touching "cmTC_a9fc2.dir\\Debug\\cmTC_a9fc2.tlog\\cmTC_a9fc2.lastbuildstate".
-        Done Building Project "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\Ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-884puu\\cmTC_a9fc2.vcxproj" (default targets).
+          Deleting file "cmTC_0e7fb.dir\\Debug\\cmTC_0e7fb.tlog\\unsuccessfulbuild".
+          Touching "cmTC_0e7fb.dir\\Debug\\cmTC_0e7fb.tlog\\cmTC_0e7fb.lastbuildstate".
+        Done Building Project "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-n926qi\\cmTC_0e7fb.vcxproj" (default targets).
         
         Build succeeded.
             0 Warning(s)
             0 Error(s)
         
-        Time Elapsed 00:00:00.39
+        Time Elapsed 00:00:00.43
         
       exitCode: 0
   -
@@ -205,48 +207,50 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/Ep2/build/CMakeFiles/CMakeScratch/TryCompile-7ptaus"
-      binary: "C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/Ep2/build/CMakeFiles/CMakeScratch/TryCompile-7ptaus"
+      source: "C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/ep2/build/CMakeFiles/CMakeScratch/TryCompile-f8h0te"
+      binary: "C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/ep2/build/CMakeFiles/CMakeScratch/TryCompile-f8h0te"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /W3 /GR /EHsc"
+      CMAKE_CXX_FLAGS_DEBUG: "/MDd /Zi /Ob0 /Od /RTC1"
       CMAKE_CXX_SCAN_FOR_MODULES: "OFF"
+      CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
     buildResult:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/Ep2/build/CMakeFiles/CMakeScratch/TryCompile-7ptaus'
+        Change Dir: 'C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/ep2/build/CMakeFiles/CMakeScratch/TryCompile-f8h0te'
         
-        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_64792.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files (x86)/Microsoft Visual Studio/2022/BuildTools/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_1399b.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         MSBuild version 17.7.2+d6990bcfa for .NET Framework
-        Build started 08/12/2024 16:59:28.
+        Build started 08/12/2024 19:03:37.
         
-        Project "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\Ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7ptaus\\cmTC_64792.vcxproj" on node 1 (default targets).
+        Project "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-f8h0te\\cmTC_1399b.vcxproj" on node 1 (default targets).
         PrepareForBuild:
-          Creating directory "cmTC_64792.dir\\Debug\\".
-          Creating directory "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\Ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7ptaus\\Debug\\".
-          Creating directory "cmTC_64792.dir\\Debug\\cmTC_64792.tlog\\".
+          Creating directory "cmTC_1399b.dir\\Debug\\".
+          Creating directory "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-f8h0te\\Debug\\".
+          Creating directory "cmTC_1399b.dir\\Debug\\cmTC_1399b.tlog\\".
         InitializeBuildStatus:
-          Creating "cmTC_64792.dir\\Debug\\cmTC_64792.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
-          Touching "cmTC_64792.dir\\Debug\\cmTC_64792.tlog\\unsuccessfulbuild".
+          Creating "cmTC_1399b.dir\\Debug\\cmTC_1399b.tlog\\unsuccessfulbuild" because "AlwaysCreate" was specified.
+          Touching "cmTC_1399b.dir\\Debug\\cmTC_1399b.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_64792.dir\\Debug\\\\" /Fd"cmTC_64792.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_1399b.dir\\Debug\\\\" /Fd"cmTC_1399b.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
           Microsoft (R) C/C++ Optimizing Compiler Version 19.37.32825 for x64
-          CMakeCXXCompilerABI.cpp
           Copyright (C) Microsoft Corporation.  All rights reserved.
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_64792.dir\\Debug\\\\" /Fd"cmTC_64792.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
+          CMakeCXXCompilerABI.cpp
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_1399b.dir\\Debug\\\\" /Fd"cmTC_1399b.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.31\\Modules\\CMakeCXXCompilerABI.cpp"
         Link:
-          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\Ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7ptaus\\Debug\\cmTC_64792.exe" /INCREMENTAL /ILK:"cmTC_64792.dir\\Debug\\cmTC_64792.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/Ep2/build/CMakeFiles/CMakeScratch/TryCompile-7ptaus/Debug/cmTC_64792.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/Ep2/build/CMakeFiles/CMakeScratch/TryCompile-7ptaus/Debug/cmTC_64792.lib" /MACHINE:X64  /machine:x64 cmTC_64792.dir\\Debug\\CMakeCXXCompilerABI.obj
-          cmTC_64792.vcxproj -> C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\Ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7ptaus\\Debug\\cmTC_64792.exe
+          C:\\Program Files (x86)\\Microsoft Visual Studio\\2022\\BuildTools\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-f8h0te\\Debug\\cmTC_1399b.exe" /INCREMENTAL /ILK:"cmTC_1399b.dir\\Debug\\cmTC_1399b.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/ep2/build/CMakeFiles/CMakeScratch/TryCompile-f8h0te/Debug/cmTC_1399b.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/ep2/build/CMakeFiles/CMakeScratch/TryCompile-f8h0te/Debug/cmTC_1399b.lib" /MACHINE:X64  /machine:x64 cmTC_1399b.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_1399b.vcxproj -> C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-f8h0te\\Debug\\cmTC_1399b.exe
         FinalizeBuildStatus:
-          Deleting file "cmTC_64792.dir\\Debug\\cmTC_64792.tlog\\unsuccessfulbuild".
-          Touching "cmTC_64792.dir\\Debug\\cmTC_64792.tlog\\cmTC_64792.lastbuildstate".
-        Done Building Project "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\Ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-7ptaus\\cmTC_64792.vcxproj" (default targets).
+          Deleting file "cmTC_1399b.dir\\Debug\\cmTC_1399b.tlog\\unsuccessfulbuild".
+          Touching "cmTC_1399b.dir\\Debug\\cmTC_1399b.tlog\\cmTC_1399b.lastbuildstate".
+        Done Building Project "C:\\Users\\rahul\\Desktop\\My Code\\IE CODE PROJECT\\Game_Boy_Emulator\\ep2\\build\\CMakeFiles\\CMakeScratch\\TryCompile-f8h0te\\cmTC_1399b.vcxproj" (default targets).
         
         Build succeeded.
             0 Warning(s)
             0 Error(s)
         
-        Time Elapsed 00:00:00.38
+        Time Elapsed 00:00:00.43
         
       exitCode: 0
   -
