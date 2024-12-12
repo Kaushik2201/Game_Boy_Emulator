@@ -20,13 +20,28 @@
 #define echo_ram_end   0xFDFF
 #define oam_start  0xFE00
 #define oam_end    0xFE9F
-#define not_usable_start 0xFEA0
-#define not_usable_end   0xFEFF
+#define non_usable_start 0xFEA0
+#define non_usable_end   0xFEFF
 #define io_registers_start 0xFF00
 #define io_registers_end   0xFF7F
 #define hram_start 0xFF80
 #define hram_end   0xFFFE
 #define interrupt_enable_register 0xFFFF
+
+//IDs
+#define rom_bank_0_start_id 1
+#define rom_bank_switch_start_id 2
+#define vram_start_id 3
+#define external_ram_start_id 4
+#define wram_bank_0_start_id 5
+#define wram_bank_switch_start_id 6
+#define echo_ram_start_id 7
+#define oam_start_id 8
+#define non_usable_start_id 9
+#define io_registers_start_id 10
+#define hram_start_id 11
+#define interrupt_enable_register_id 12
+
 
 #define vram_bank_size 0x2000
 #define wram_bank_size 0x1000
