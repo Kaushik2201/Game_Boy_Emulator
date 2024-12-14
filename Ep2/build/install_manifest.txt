@@ -1,2 +1,0 @@
-C:/Program Files (x86)/murlyMath/lib/libmurlyMath.a
-C:/Program Files (x86)/murlyMath/include/murlyMath/adder.h
