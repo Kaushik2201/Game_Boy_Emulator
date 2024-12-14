@@ -1,0 +1,1 @@
+  -L"C:/Users/rahul/Desktop/My Code/IE CODE PROJECT/Game_Boy_Emulator/ep2/TestSome/../build/Release"  -lmurlyMath -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32 
