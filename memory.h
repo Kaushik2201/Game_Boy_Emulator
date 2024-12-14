@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#define MEMORY_MAP_ENTRIES 14
+
 #define ROM_BANK_00_START   0x0000
 #define ROM_BANK_00_END     0x3FFF
 #define ROM_BANK_SWITCH_START 0x4000
@@ -22,8 +24,12 @@
 #define OAM_END    0xFE9F
 #define NON_USABLE_START 0xFEA0
 #define NON_USABLE_END   0xFEFF
-#define IO_REGISTERS_START 0xFF00
-#define IO_REGISTERS_END   0xFF7F
+#define IO_REGISTERS_START_1 0xFF00
+#define IO_REGISTERS_END_1   0xFF0F
+#define AUDIO_BEGIN 0xFF10
+#define AUDIO_END 0xFF3F
+#define IO_REGISTERS_START_2 0xFF40
+#define IO_REGISTERS_END_2 0xFF7F
 #define HRAM_START 0xFF80
 #define HRAM_END   0xFFFE
 #define INTERRUPT_ENABLE_REGISTER 0xFFFF
@@ -39,14 +45,16 @@
 #define OAM_START_ID 8
 #define NON_USABLE_START_ID 9
 #define IO_REGISTERS_START_ID 10
-#define HRAM_START_ID 11
-#define INTERRUPT_ENABLE_REGISTER_ID 12
+#define AUDIO_ID 10
+#define IO_REGISTERS_START_ID_2 12
+#define HRAM_START_ID 13
+#define INTERRUPT_ENABLE_REGISTER_ID 14
 
 
 #define VRAM_BANK_SIZE 0x2000
 #define WRAM_BANK_SIZE 0x1000
 
-#define IO_PORT_BASE IO_REGISTERS_START
+#define IO_PORT_BASE IO_REGISTERS_START_1
 #define IO_PORT_P1 0x00
 #define IO_PORT_SB 0x01
 #define IO_PORT_SC 0x02
@@ -108,21 +116,57 @@
 #define IO_PORT_PCM34 0x77
 #define IO_PORT_IE 0x7F
 
-typedef struct {
-    uint8_t rom[0x8000];
-    uint8_t vram[VRAM_BANK_SIZE * 2];
-    uint8_t external_ram[0x2000];
-    uint8_t wram[WRAM_BANK_SIZE * 8];
-    uint8_t oam[0xA0];
-    uint8_t hram[0x7F];
-    uint8_t interrupt_enable;
-} MEMORY_T;
+#define GBC_BOOT_ROM_SIZE 0x8ff 
 
-void MEMORY_INIT(MEMORY_T *memory);
-uint8_t MEMORY_READ8(MEMORY_T *memory, uint16_t address);
-void MEMORY_WRITE8(MEMORY_T *memory, uint16_t address, uint8_t value);
-uint16_t MEMORY_READ16(MEMORY_T *memory, uint16_t address);
-void MEMORY_WRITE16(MEMORY_T *memory, uint16_t address, uint16_t value);
+struct memory_map_entry
+{
+    uint16_t id;
+    uint16_t addr_begin;
+    uint16_t addr_end;  
+    memory_read read;
+    memory_write write;
+    void *udata;
+};
+
+struct gbc_palette
+{
+    uint16_t c[4];
+};
+
+struct gbc_memory
+{
+    memory_read read;
+    memory_write write;
+    memory_map_entry map[MEMORY_MAP_ENTRIES];
+    uint8_t wram[WRAM_BANK_SIZE * 8]; /* 8 WRAM banks */
+    uint8_t hraw[HRAM_END - HRAM_START + 1];
+
+    uint8_t io_ports[IO_REGISTERS_END_2 - IO_REGISTERS_START_1 + 1];
+    uint8_t oam[OAM_END - OAM_START + 1];
+
+    gbc_palette bg_palette[8];
+    gbc_palette obj_palette[8];
+
+    uint8_t boot_rom_enabled;
+    uint8_t boot_rom[GBC_BOOT_ROM_SIZE];
+};
+
+#define IO_ADDR_PORT(addr) ((addr) - IO_PORT_BASE)
+#define IO_PORT_ADDR(port) ((port) + IO_PORT_BASE)
+
+#define IO_PORT_READ(mem, port) ((mem)->io_ports[(port)])
+#define IO_PORT_WRITE(mem, port, data) ((mem)->io_ports[(port)] = (data))
+
+#define REQUEST_INTERRUPT(mem, intp) ((mem)->io_ports[IO_PORT_IF] |= (intp))
+
+#define BG_PALETTE_READ(mem, idx) ((mem)->bg_palette + ((idx)))
+#define OBJ_PALETTE_READ(mem, idx) ((mem)->obj_palette + ((idx)))
+#define OAM_ADDR(mem) ((mem)->oam)
+
+void mem_init(gbc_memory *memory);
+void register_memory_map(gbc_memory *mem, memory_map_entry *entry);
+void* connect_io_port(gbc_memory *mem, uint16_t addr);
+
 typedef uint8_t (*memory_read)(void *udata, uint16_t addr);
 typedef uint8_t (*memory_write)(void *udata, uint16_t addr, uint8_t data);
 
