@@ -1,2 +1,0 @@
-/usr/local/lib/libmymath.a
-/usr/local/include/adder.h
