@@ -1,3 +1,0 @@
-/home/kishora/IE_CODE_PROJECT/testsome/build/CMakeFiles/testsome.dir
-/home/kishora/IE_CODE_PROJECT/testsome/build/CMakeFiles/edit_cache.dir
-/home/kishora/IE_CODE_PROJECT/testsome/build/CMakeFiles/rebuild_cache.dir
