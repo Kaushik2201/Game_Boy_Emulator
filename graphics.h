@@ -1,20 +1,32 @@
 #pragma once
 #include<stdint.h>
 
-#define SCREEN_WIDTH 160
-#define SCREEN_HEIGHT 144
+#include "memory.h"
+#define VRAM_BANK_SIZE (VRAM_END-VRAM_BEGIN+1)
+
+
+typedef void (*screen_write)(void *udata, uint16_t addr, uint16_t data);
+#define VRAM_BANK_SIZE (VRAM_END-VRAM_BEGIN+1)
+
+#define VISIBLE_HORIZONTAL_PIXELS 160
+#define VISIBLE_VERTICAL_PIXELS 144
 #define TILE_SIZE 8
+#define TILE_MAP_SIZE 256 
 #define MAX_SPRITES 40
 #define MAX_SPRITES_PER_LINE 10
 #define OBJ_WIDTH 8
 #define OBJ_HEIGHT 8
 #define OBJ_HEIGHT_2 16
 
-#define TOTAL_SCANLINES 154
-#define VISIBLE_SCANLINES 144
+#define TILE_TYPE_OBJ  1
+#define TILE_TYPE_BG   2
+#define TILE_TYPE_WIN  3
+
+#define TOTAL_SCANLINES 153
+#define VISIBLE_SCANLINES 143
 #define FRAME_RATE 60
 #define DOTS_PER_FRAME 70224
-#define DOTS_PER_SCANLINES 456
+#define DOTS_PER_SCANLINE 456
 
 //PPU Modes
 #define PPU_MODE_3 3    //DRAWING
@@ -24,9 +36,9 @@
 
 //Dots per PPU Mode
 #define PPU_MODE_0_DOTS 100
-#define PPU_MODE_1_DOTS 456
+#define PPU_MODE_1_DOTS DOTS_PER_SCANLINE
 #define PPU_MODE_2_DOTS 80
-#define PPU_MODE_3_DOTS 276
+#define PPU_MODE_3_DOTS (DOTS_PER_SCANLINE - PPU_MODE_0_DOTS - PPU_MODE_2_DOTS)
 
 //LCDC Register Bits
 #define LCDC_BG_PRIORITY        (1<<0)      // BG & WINDOW MASTER PRIORITY (IN CGB MODE): 0 = OFF ; 1 = ON 
@@ -46,55 +58,73 @@
 #define STAT_MODE_2_INTERRUPT   (1<<5)      
 #define STAT_LYC_INTERRUPT      (1<<6)      
 
+//Returning the the bits directly from tile attributes
+#define TILE_ATTR_PRIORITY(x) ((x) & 0x80)
+#define TILE_ATTR_YFLIP(x) ((x) & 0x40)
+#define TILE_ATTR_XFLIP(x) ((x) & 0x20)
+#define TILE_ATTR_VRAM_BANK(x) ((x) & 0x08)
+#define TILE_ATTR_PALETTE(x) ((x) & 0x07)
+
+//Returning the the bits directly from object attributes
+#define OBJECT_ATTR_PRIORITY(x) ((x) & 0x80)
+#define OBJECT_ATTR_YFLIP(x) ((x) & 0x40)
+#define OBJECT_ATTR_XFLIP(x) ((x) & 0x20)
+#define OBJECT_ATTR_VRAM_BANK(x) ((x) & 0x08)
+#define OBJECT_ATTR_PALETTE(x) ((x) & 0x07)
+
+//Extracting RGB
+#define GBC_COLOR_TO_RGB_R(x) ((x & 0x1F) * 0xFF / 0x1F)
+#define GBC_COLOR_TO_RGB_G(x) (((x & 0x03E0) >> 5) * 0xFF / 0x1F)
+#define GBC_COLOR_TO_RGB_B(x) (((x & 0x7C00) >> 10) * 0xFF / 0x1F)
+
+#define MAX_OBJ_SCANLINE 10
+#define MAX_OBJS ((OAM_END - OAM_BEGIN + 1) / 4)
+
+#define OAM_Y_TO_SCREEN(y) ((y) - 16)
+#define OAM_X_TO_SCREEN(x) ((x) - 8)
+
+// each tile is 8x8, top-left is 0,0 
+#define TILE_PIXEL_COLORID(td, x, y)  \
+    ((td)->data[y * 2] & (1 << (7 - x)) ? 1 : 0) + \
+    ((td)->data[y * 2 + 1] & (1 << (7 - x)) ? 2 : 0)
+
+
 typedef struct {
     uint8_t data[16];       //Because tile has 8x8 pixels of 2bits each
-} tile;
-
-typedef struct{
-    uint8_t priority : 1;
-    uint8_t Y_flip : 1;
-    uint8_t X_flip : 1;
-    uint8_t vram_bank : 1;
-    uint8_t palette : 3;
-} tileattributes;
+} gbc_tile;
 
 typedef struct{
     uint8_t tile_indices[32][32];           //Tile indices for a map 32*32
-} tilemap;
+} gbc_tilemap;
 
 typedef struct{
-    tileattributes attributes[32][32];      //Tile attributes(for CGB mode)
-} tilemap_attributes;
+    uint8_t data[32][32];      //Tile attributes(for CGB mode)
+} gbc_tilemap_attributes;
 
 typedef struct{
     uint8_t y_pos;
     uint8_t x_pos;
     uint8_t tile_index;
     uint8_t attributes;
-} object;
+} gbc_obj;
 
-typedef struct{
-    tile tiles[384];
-    object objects[40];
-    tilemap background_map;
-    tilemap window_map; 
-} graphics;
+typedef struct 
+{
+    uint32_t dots;   /* dots to next graphic update */
+    uint8_t vram[VRAM_BANK_SIZE * 2]; /* 2x8KB */
+    uint8_t scanline;
+    uint8_t mode;
 
-//Returning the the bits directly from tile attributes
-#define TILE_ATTR_PRIORITY(x)((x) & 0x80)
-#define TILE_ATTR_YFLIP(x)((x) & 0x40)
-#define TILE_ATTR_XFLIP(x)((x) & 0x20)
-#define TILE_ATTR_VRAM_BANK(x)((x) & 0x08)
-#define TILE_ATTR_PALETTE(x)((x) & 0x07)
+    void *screen_udata;
+    void (*screen_update)(void *udata);
+    screen_write screen_write;
 
-//Returning the the bits directly from object attributes
-#define OBJECT_ATTR_PRIORITY(x)((x) & 0x80)
-#define OBJECT_ATTR_YFLIP(x)((x) & 0x40)
-#define OBJECT_ATTR_XFLIP(x)((x) & 0x20)
-#define OBJECT_ATTR_VRAM_BANK(x)((x) & 0x08)
-#define OBJECT_ATTR_PALETTE(x)((x) & 0x07)
+    gbc_memory *mem;
+} gbc_graphic;
 
-//Extracting RGB
-#define GBC_COLOR_TO_RGB_R(x)(((x>>11) & 0x1F) * 0xFF / 0x1F)   //Red Color
-#define GBC_COLOR_TO_RGB_G(x)(((x>>5) & 0x3F) * 0xFF / 0x3F)    //Green color
-#define GBC_COLOR_TO_RGB_B(x)(((x)& 0x1F) * 0xFF / 0x1F)        //Blue Color
+
+void gbc_graphic_connect(gbc_graphic *graphic, gbc_memory *mem);
+void gbc_graphic_init(gbc_graphic *graphic);
+void gbc_graphic_cycle(gbc_graphic *graphic);
+uint8_t* gbc_graphic_get_tile_attr(gbc_graphic *graphic, uint8_t type, uint8_t idx);
+gbc_tile* gbc_graphic_get_tile(gbc_graphic *graphic, uint8_t type, uint8_t idx, uint8_t bank);
