@@ -2,11 +2,11 @@
 #include<stdint.h>
 
 #include "memory.h"
-#define VRAM_BANK_SIZE (VRAM_END-VRAM_BEGIN+1)
+#define VRAM_BANK_SIZE (VRAM_END-VRAM_START+1)
 
 
 typedef void (*screen_write)(void *udata, uint16_t addr, uint16_t data);
-#define VRAM_BANK_SIZE (VRAM_END-VRAM_BEGIN+1)
+
 
 #define VISIBLE_HORIZONTAL_PIXELS 160
 #define VISIBLE_VERTICAL_PIXELS 144
@@ -119,12 +119,12 @@ typedef struct
     void (*screen_update)(void *udata);
     screen_write screen_write;
 
-    gbc_memory *mem;
-} gbc_graphic;
+    gbc_memory_t *mem;
+} gbc_graphic_t;
 
 
-void gbc_graphic_connect(gbc_graphic *graphic, gbc_memory *mem);
-void gbc_graphic_init(gbc_graphic *graphic);
-void gbc_graphic_cycle(gbc_graphic *graphic);
-uint8_t* gbc_graphic_get_tile_attr(gbc_graphic *graphic, uint8_t type, uint8_t idx);
-gbc_tile* gbc_graphic_get_tile(gbc_graphic *graphic, uint8_t type, uint8_t idx, uint8_t bank);
+void gbc_graphic_connect(gbc_graphic_t *graphic, gbc_memory_t *mem);
+void gbc_graphic_init(gbc_graphic_t *graphic);
+void gbc_graphic_cycle(gbc_graphic_t *graphic);
+uint8_t* gbc_graphic_get_tile_attr(gbc_graphic_t *graphic, uint8_t type, uint8_t idx);
+gbc_tile* gbc_graphic_get_tile(gbc_graphic_t *graphic, uint8_t type, uint8_t idx, uint8_t bank);

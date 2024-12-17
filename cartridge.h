@@ -38,8 +38,8 @@ typedef struct {
     uint8_t entry_point[4];
     uint8_t logo[0x30];
     uint8_t title[16];
-    #define cart_manufacturer_code title[0x13f-0x134]
-    #define cart_cgb_flag title[0x143-0x134]
+    #define cart_manufacturer_code title[0x13f-0x134]   /* 0x13F-0x142    Manufacturer Code */
+    #define cart_cgb_flag title[0x143-0x134]            /* 0x143          CGB Flag */
     uint16_t new_licensee_code;
     uint8_t sgb_flag;
     uint8_t cartridge_type;

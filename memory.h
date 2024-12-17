@@ -118,7 +118,7 @@
 
 #define GBC_BOOT_ROM_SIZE 0x8ff 
 
-struct memory_map_entry
+typedef struct
 {
     uint16_t id;
     uint16_t addr_begin;
@@ -126,30 +126,30 @@ struct memory_map_entry
     memory_read read;
     memory_write write;
     void *udata;
-};
+} memory_map_entry_t;
 
-struct gbc_palette
+typedef struct
 {
     uint16_t c[4];
-};
+} gbc_palette_t;
 
-struct gbc_memory
+typedef struct
 {
     memory_read read;
     memory_write write;
-    memory_map_entry map[MEMORY_MAP_ENTRIES];
+    memory_map_entry_t map[MEMORY_MAP_ENTRIES];
     uint8_t wram[WRAM_BANK_SIZE * 8]; /* 8 WRAM banks */
     uint8_t hraw[HRAM_END - HRAM_START + 1];
 
     uint8_t io_ports[IO_REGISTERS_END_2 - IO_REGISTERS_START_1 + 1];
     uint8_t oam[OAM_END - OAM_START + 1];
 
-    gbc_palette bg_palette[8];
-    gbc_palette obj_palette[8];
+    gbc_palette_t bg_palette[8];
+    gbc_palette_t obj_palette[8];
 
     uint8_t boot_rom_enabled;
     uint8_t boot_rom[GBC_BOOT_ROM_SIZE];
-};
+} gbc_memory_t;
 
 #define IO_ADDR_PORT(addr) ((addr) - IO_PORT_BASE)
 #define IO_PORT_ADDR(port) ((port) + IO_PORT_BASE)
@@ -163,9 +163,9 @@ struct gbc_memory
 #define OBJ_PALETTE_READ(mem, idx) ((mem)->obj_palette + ((idx)))
 #define OAM_ADDR(mem) ((mem)->oam)
 
-void mem_init(gbc_memory *memory);
-void register_memory_map(gbc_memory *mem, memory_map_entry *entry);
-void* connect_io_port(gbc_memory *mem, uint16_t addr);
+void mem_init(gbc_memory_t *memory);
+void register_memory_map(gbc_memory_t *mem, memory_map_entry_t *entry);
+void* connect_io_port(gbc_memory_t *mem, uint16_t addr);
 
 typedef uint8_t (*memory_read)(void *udata, uint16_t addr);
 typedef uint8_t (*memory_write)(void *udata, uint16_t addr, uint8_t data);
