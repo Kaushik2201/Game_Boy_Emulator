@@ -1,8 +1,7 @@
 #ifndef cartridge_h
 #define cartridge_h
 
-#include <stdint.h>
-#include <stdbool.h>
+#include <stdint.h>    
 
 // Cartridge types
 #define CART_TYPE_ROM_ONLY 0x00
@@ -34,14 +33,14 @@
 #define CART_TYPE_HUC3 0xFE
 #define CART_TYPE_HUC1_RAM_BATTERY 0xFF
 
-
+/* https://gbdev.io/pandocs/The_Cartridge_Header.html */
 typedef struct {
     uint8_t entry_point[4];
     uint8_t logo[0x30];
-    char title[16];
-    char manufacturer_code[4];
-    uint8_t cgb_flag;
-    char new_licensee_code[2];
+    uint8_t title[16];
+    #define cart_manufacturer_code title[0x13f-0x134]
+    #define cart_cgb_flag title[0x143-0x134]
+    uint16_t new_licensee_code;
     uint8_t sgb_flag;
     uint8_t cartridge_type;
     uint8_t rom_size;
@@ -51,25 +50,17 @@ typedef struct {
     uint8_t mask_rom_version;
     uint8_t header_checksum;
     uint16_t global_checksum;
-} cartridge_header_t;
-
-typedef struct {
-    uint8_t *rom;
-    uint8_t *ram;
-    uint8_t rom_bank_count;
-    uint8_t ram_bank_count;
-    uint8_t current_rom_bank;
-    uint8_t current_ram_bank;
-    cartridge_header_t header;
+    uint8_t code;
 } cartridge_t;
 
+/* https://gbdev.io/pandocs/The_Cartridge_Header.html#0148--rom-size */
 
-bool cartridge_init(cartridge_t *cartridge, const char *filename);
-void cartridge_free(cartridge_t *cartridge);
-uint8_t cartridge_read8(cartridge_t *cartridge, uint16_t address);
-void cartridge_write8(cartridge_t *cartridge, uint16_t address, uint8_t value);
-void cartridge_set_rom_bank(cartridge_t *cartridge, uint8_t bank);
-void cartridge_set_ram_bank(cartridge_t *cartridge, uint8_t bank);
-bool cartridge_verify_header(cartridge_t *cartridge);
+#define cartridge_rom_size(cart)    (32 * (1 << (cart)->rom_size) * 1024)   
+#define cartridge_rom_banks(cart)   (2 << cart->rom_size)
+
+#define cartridge_code(cart)        ((uint8_t*)&(cart->code))
+#define cartridge_code_size(cart)   (cartridge_code(cart) - (uint8_t*)(cart) + cartridge_rom_size((cart)))
+
+cartridge_t* cartridge_load(uint8_t *data);
 
 #endif 
