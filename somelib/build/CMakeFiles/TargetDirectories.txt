@@ -1,7 +1,0 @@
-/home/kishora/IE_CODE_PROJECT/somelib/build/CMakeFiles/mymath.dir
-/home/kishora/IE_CODE_PROJECT/somelib/build/CMakeFiles/edit_cache.dir
-/home/kishora/IE_CODE_PROJECT/somelib/build/CMakeFiles/rebuild_cache.dir
-/home/kishora/IE_CODE_PROJECT/somelib/build/CMakeFiles/list_install_components.dir
-/home/kishora/IE_CODE_PROJECT/somelib/build/CMakeFiles/install.dir
-/home/kishora/IE_CODE_PROJECT/somelib/build/CMakeFiles/install/local.dir
-/home/kishora/IE_CODE_PROJECT/somelib/build/CMakeFiles/install/strip.dir
