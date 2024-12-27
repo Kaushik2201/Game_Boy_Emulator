@@ -1,3 +1,0 @@
-C:/Users/HP/Desktop/Game_Boy_Emulator/Game_Boy_Emulator/L2/cpp/build/CMakeFiles/merlymath.dir
-C:/Users/HP/Desktop/Game_Boy_Emulator/Game_Boy_Emulator/L2/cpp/build/CMakeFiles/edit_cache.dir
-C:/Users/HP/Desktop/Game_Boy_Emulator/Game_Boy_Emulator/L2/cpp/build/CMakeFiles/rebuild_cache.dir

@@ -1,2 +1,0 @@
-C:\MinGW\bin\ar.exe qc libmerlymath.a CMakeFiles/merlymath.dir/adder.cpp.obj
-C:\MinGW\bin\ranlib.exe libmerlymath.a
