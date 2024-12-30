@@ -4,21 +4,24 @@
 #include <cstdint>
 #include <functional>
 #include <unordered_map>
+#include <string>
 
-struct CPU {
-    uint8_t A, F; 
-    uint8_t B, C, D, E, H, L; 
-    uint16_t SP, PC; 
+// struct CPU {
+//     uint8_t A, F; 
+//     uint8_t B, C, D, E, H, L; 
+//     uint16_t SP, PC; 
 
-    std::function<uint8_t(uint16_t)> read_memory;
-    std::function<void(uint16_t, uint8_t)> write_memory;
+//     std::function<uint8_t(uint16_t)> read_memory;
+//     std::function<void(uint16_t, uint8_t)> write_memory;
+// };
+struct Instruction {
+    uint8_t opcode;
+    uint8_t size;
+    uint8_t cycles;
+    uint8_t cycles2;
+    std::string name;
+    std::function<void()> execute;
 };
-
-//FLAGS
-constexpr uint8_t FLAG_Z = 0x80; 
-constexpr uint8_t FLAG_N = 0x40; 
-constexpr uint8_t FLAG_H = 0x20; 
-constexpr uint8_t FLAG_C = 0x10; 
 
 
 #endif 
