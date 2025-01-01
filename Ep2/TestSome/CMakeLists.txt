@@ -1,5 +1,0 @@
-cmake_minimum_required(VERSION 3.13)
-project(TestSome)
-add_executable(TestSome cpp/main.cpp)
-target_link_directories(TestSome PRIVATE ${CMAKE_SOURCE_DIR}/../build/Release/)
-target_link_libraries(TestSome murlyMath)
