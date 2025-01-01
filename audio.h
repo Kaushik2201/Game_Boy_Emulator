@@ -48,7 +48,7 @@ typedef struct {
 
 
 typedef struct {
-gbc_channel *channel1;
+gbc_audio_channel channel1;
 gbc_audio_channel channel2;
     gbc_audio_channel channel3;
     gbc_audio_channel channel4;
