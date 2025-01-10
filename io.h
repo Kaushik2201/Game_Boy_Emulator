@@ -3,10 +3,13 @@
 
 #include <stdint.h>
 
-#define KEY_UP       0x10
-#define KEY_DOWN     0x20
-#define KEY_LEFT     0x40
-#define KEY_RIGHT    0x80
+#define KEY_DPAD     0x10
+#define KEY_BUTTON   0x20
+
+#define KEY_RIGHT    0x10
+#define KEY_LEFT     0x20
+#define KEY_UP       0x40
+#define KEY_DOWN     0x80
 #define KEY_A        0x01
 #define KEY_B        0x02
 #define KEY_START    0x04
@@ -17,11 +20,11 @@
 // Memory struct
 typedef struct {
     uint8_t *memory;
-} IO;
+} gbc_io_t;
 
 // Function declarations
-void io_connect(IO *io, uint8_t *memory);
-void io_init(IO *io);
-void io_cleanup(IO *io);
+void io_connect(gbc_io_t *io, uint8_t *memory);
+void io_init(gbc_io_t *io);
+void io_cleanup(gbc_io_t *io);
 
 #endif 
