@@ -1,6 +1,7 @@
 #include "isa.h"
 #include "common.h"
 #include "cpu.h"
+#include "isa.h"
 
 
 
@@ -24,6 +25,25 @@ static void stop(gbc_cpu_t *cpu, gbc_instruction_t *ins) {
      (cpu->dspeed ? "DOUBLE":"NORMAL"));
 } 
 
-static void inc_r8(gbc_cpu_t *cpu, gbc_instruction_t *ins){
-    
+static void adc_r8_r8(gbc_cpu_t *cpu, gbc_instruction_t *ins)
+{
+    LOG_DEBUG("ADC r8, r8: %s\n", ins->name);
+
+    cpu_register_t *regs = &(cpu->reg);
+    size_t reg_offset = (size_t)ins->op1;
+    size_t reg2_offset = (size_t)ins->op2;
+    uint8_t v1 = READ_R8(regs, reg_offset);
+    uint8_t v2 = READ_R8(regs, reg2_offset);
+    uint8_t carry = READ_R_FLAG(regs, FLAG_C);
+    uint8_t hc = HALF_CARRY_ADC(v1, v2, carry);
+
+    uint8_t result = v1 + v2 + carry;
+    carry = (v1 + v2 + carry) > UINT8_MASK;
+
+    WRITE_R8(regs, reg_offset, result);
+
+    CLEAR_R_FLAG(regs, FLAG_N);
+    SET_R_FLAG_VALUE(regs, FLAG_H, hc);
+    SET_R_FLAG_VALUE(regs, FLAG_C, carry);
+    SET_R_FLAG_VALUE(regs, FLAG_Z, result == 0);
 }
