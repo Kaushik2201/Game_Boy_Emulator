@@ -3,49 +3,10 @@
 #include<stdint.h>
 #include"memory.h"
 
-//FLAG BIT MASKS
-#define FLAG_Z  0x80     // ZERO FLAG
-#define FLAG_N  0x40    // SUBTRACTION FLAG
-#define FLAG_H  0x20     // HALF CARRY FLAG
-#define FLAG_C  0x10     //  CARRY FLAG
 
-typedef union{
-    uint16_t full;
-    struct{
-        uint8_t low;
-        uint8_t high;
-    };
-} reg16_t;
-
-//CPU REGISTERS
-typedef struct{
-    
-    reg16_t AF;                   // ACCUMULATOR AND FLAGS (AF REGISTER)
-    reg16_t BC;                   // BC REGISTER
-    reg16_t DE;                   // DE REGISTER
-    reg16_t HL;                   // HL REGISTER
-    uint16_t SP;                  // STACK POINTER
-    uint16_t PC;                  // PROGRAM COUNTER / POINTER
-
-} cpu_reg_t;
+typedef struct cpu_register cpu_register_t;
 
 
-//FLAG HELPER FUNCTIONS
-#define SET_FLAG(reg,flag) ((reg)|=(flag))                  // SET FLAG BIT
-#define CLEAR_FLAG(reg,flag) ((reg) & = ~(flag))            // CLEAR FLAG BIT
-#define CHECK_FLAG(reg,flag) (((reg) & (flag))!=0)          // CHECK FLAG BIT   
-
-//READ AND WRITE 8-BIT REGISTERS 
-#define READ_8(reg) (reg)
-#define WRITE_8(reg,value) ((reg)=((value)))
-
-//READ AND WRITE 16_BIT REGISTERS
-#define READ_16(reg) ((reg).full)
-#define WRITE_16(reg,value) ((reg).full=(value))
-
-//READ AND WRITE LSB
-#define READ_1(reg) (reg & 0x1)
-#define WRITE_1(reg, value) (reg) = (value & 0x1)
 
 //INTERRUPTS MASKS
 #define INTERRUPT_VBLANK    0x01
@@ -69,9 +30,100 @@ typedef struct{
 #define FRAME_INTERVAL      (1000000000/FRAME_RATE)
 #define CYCLES_PER_FRAME    (CLOCK_RATE/FRAME_RATE)
 
+
+#define OFFSET_OF(type, field) \
+    ((size_t) &((type *)0)->field)
+
+#define OFFSET_OF_2(type, field, type2, field2) \
+    (((size_t) &((type *)0)->field) + ((size_t) &((type2 *)0)->field2))
+
+#define OFFSET_OF_3(type, field, type2, field2, type3, field3) \
+    (((size_t) &((type *)0)->field) + ((size_t) &((type2 *)0)->field2) + ((size_t) &((type3 *)0)->field3))
+
+
+#define REG_TYPE(high, low) union _reg_pair_##high##low
+#define REG_FIELD_NAME(high, low) R_##high##low
+#define REG_16_NAME(high, low) high##low
+#define REG_PAIR_TYPE(high, low) struct _reg_##high##_##low
+#define REG_PAIR_NAME(high, low) pair
+#define REG_8_PAIR_FIELD_NAMe(high, low) high##low
+#define REG_8_NAME(name) name
+
+#define REGISTER_PAIR(high, low)                 \
+    REG_TYPE(high, low)                          \
+    {                                            \
+        uint16_t REG_16_NAME(high, low);         \
+        REG_PAIR_TYPE(high, low)                 \
+        {                                        \
+            uint8_t REG_8_NAME(low);             \
+            uint8_t REG_8_NAME(high);            \
+        } REG_PAIR_NAME(high, low);              \
+    } REG_FIELD_NAME(high, low)
+
+
+struct cpu_register
+{
+    REGISTER_PAIR(A, F);
+    REGISTER_PAIR(B, C);
+    REGISTER_PAIR(D, E);
+    REGISTER_PAIR(H, L);
+    uint16_t SP;
+    uint16_t PC;
+
+    /* r16 */
+    #define _REG_16_OFFSET(h, l) OFFSET_OF_2(cpu_register_t, REG_FIELD_NAME(h, l), REG_TYPE(h, l), REG_16_NAME(h, l))
+    #define REG_AF _REG_16_OFFSET(A, F)
+    #define REG_BC _REG_16_OFFSET(B, C)
+    #define REG_DE _REG_16_OFFSET(D, E)
+    #define REG_HL _REG_16_OFFSET(H, L)
+
+    #define REG_SP OFFSET_OF(cpu_register_t, SP)
+    #define REG_PC OFFSET_OF(cpu_register_t, PC)
+
+    /* r8 */
+    #define _REG_8_OFFSET(h, l, t) OFFSET_OF_3(cpu_register_t, REG_FIELD_NAME(h, l), REG_TYPE(h, l), REG_PAIR_NAME(h, l), REG_PAIR_TYPE(h, l), REG_8_NAME(t))
+    #define REG_A _REG_8_OFFSET(A, F, A)
+    #define REG_F _REG_8_OFFSET(A, F, F)
+    #define REG_B _REG_8_OFFSET(B, C, B)
+    #define REG_C _REG_8_OFFSET(B, C, C)
+    #define REG_D _REG_8_OFFSET(D, E, D)
+    #define REG_E _REG_8_OFFSET(D, E, E)
+    #define REG_H _REG_8_OFFSET(H, L, H)
+    #define REG_L _REG_8_OFFSET(H, L, L)
+};
+
+#define swap_i16(value) (uint16_t)((value >> 8) | (value << 8));
+
+#define READ_I16(reg) reg                  /* immediate 16-bit */
+#define READ_16(reg) reg
+#define WRITE_16(reg, value) (reg) = (value)
+
+#define READ_I8(reg) (reg)                  /* immediate 8-bit */
+#define READ_8(reg) (reg)
+#define WRITE_8(reg, value) (reg) = (value)
+
+#define READ_1(reg) (reg & 0x1)
+#define WRITE_1(reg, value) (reg) = (value & 0x1)
+
+#define READ_R16(reg, field) READ_16((*(uint16_t*) ((uint8_t*)(reg)+(field))))
+#define WRITE_R16(reg, field, value) WRITE_16((*(uint16_t*) ((uint8_t*)(reg)+(field))), (value))
+
+#define READ_R8(reg, field) READ_8(*(uint8_t*) ((uint8_t*)(reg)+(field)))
+#define WRITE_R8(reg, field, value) WRITE_8((*(uint8_t*) ((uint8_t*)(reg)+(field))), (value))
+
+//FLAG BIT MASKS
+#define FLAG_Z  0x80     // ZERO FLAG
+#define FLAG_N  0x40    // SUBTRACTION FLAG
+#define FLAG_H  0x20     // HALF CARRY FLAG
+#define FLAG_C  0x10     //  CARRY FLAG
+
+#define READ_R_FLAG(reg, flag) ((READ_R8(reg, REG_F) & flag) ? 1 : 0)
+#define SET_R_FLAG(reg, flag) WRITE_R8(reg, REG_F, (READ_R8(reg, REG_F) | flag))
+#define CLEAR_R_FLAG(reg, flag) WRITE_R8(reg, REG_F, (READ_R8(reg, REG_F) & ~flag))
+#define SET_R_FLAG_VALUE(reg, flag, value) ((value) ? (SET_R_FLAG(reg, flag)) : (CLEAR_R_FLAG(reg, flag)))
 //CPU STRUCT
 typedef struct{
-    cpu_reg_t reg;
+    cpu_register_t reg;
     memory_read mem_read;  /* memory op */
     memory_write mem_write;
     void *mem_data;
