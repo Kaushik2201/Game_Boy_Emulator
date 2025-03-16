@@ -37,7 +37,7 @@ typedef struct {
     uint8_t volume;
     uint8_t length_counter;
     uint8_t envelope_direction;
-    uint8_t envelope_pace
+    uint8_t envelope_pace;
     uint8_t waveform_id;
     uint8_t initial_length_timer;
     uint16_t frequency;
