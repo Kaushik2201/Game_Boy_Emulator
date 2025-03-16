@@ -1,8 +1,8 @@
 #ifndef INSTRUCTION_SET_H
 #define INSTRUCTION_SET_H
 
-#include <cstdint>
-#include <cpu.h>
+#include <stdint.h>
+#include "cpu.h"
 
 
 typedef struct gbc_instruction gbc_instruction_t;

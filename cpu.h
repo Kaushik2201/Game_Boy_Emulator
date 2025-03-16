@@ -122,7 +122,7 @@ struct cpu_register
 #define CLEAR_R_FLAG(reg, flag) WRITE_R8(reg, REG_F, (READ_R8(reg, REG_F) & ~flag))
 #define SET_R_FLAG_VALUE(reg, flag, value) ((value) ? (SET_R_FLAG(reg, flag)) : (CLEAR_R_FLAG(reg, flag)))
 //CPU STRUCT
-typedef struct{
+typedef struct gbc_cpu {
     cpu_register_t reg;
     memory_read mem_read;  /* memory op */
     memory_write mem_write;
