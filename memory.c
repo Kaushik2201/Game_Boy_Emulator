@@ -14,6 +14,9 @@ void gbc_mem_init(gbc_memory_t *mem) {
 memory_map_entry_t *select_entry(gbc_memory_t *mem, uint16_t addr) {
   for (int i = 0; i < MEMORY_MAP_ENTRIES; i++) {
     if (addr >= mem->map[i].addr_begin && addr <= mem->map[i].addr_end) {
+      if (mem->map[i].id == NULL) {
+        abort();
+      }
       return &mem->map[i];
     }
   }
@@ -22,7 +25,7 @@ memory_map_entry_t *select_entry(gbc_memory_t *mem, uint16_t addr) {
 static uint8_t mem_write(void *udata, uint16_t addr, uint8_t data) {
   memory_map_entry_t *entry = select_entry((gbc_memory_t *)udata, addr);
   if (entry == NULL) {
-    return 0;
+    return abort();
   }
   if (entry->write != NULL) {
     return entry->write(entry->udata, addr, data);
@@ -33,7 +36,7 @@ static uint8_t mem_write(void *udata, uint16_t addr, uint8_t data) {
 static uint8_t mem_read(void *udata, uint16_t addr) {
   memory_map_entry_t *entry = select_entry((gbc_memory_t *)udata, addr);
   if (entry == NULL) {
-    return 0;
+    return abort();
   }
   if (entry->read != NULL) {
     return entry->read(entry->udata, addr);
@@ -43,17 +46,19 @@ static uint8_t mem_read(void *udata, uint16_t addr) {
 };
 void register_memory_map(gbc_memory_t *mem, memory_map_entry_t *entry) {
   if (entry->addr_begin > entry->addr_end) {
-    return;
+    abort();
   }
   if (entry->addr_begin < ROM_BANK_00_START || entry->addr_end > HRAM_END) {
-    return;
+    abort();
   }
   for (int i = 0; i < MEMORY_MAP_ENTRIES; i++) {
-    if (mem->map[i].id == 0) {
-      mem->map[i] = *entry;
+    if (mem->map[i].id != NULL && mem->map[i].id == entry->id &&
+        mem->map[i].addr_begin <= entry->addr_end &&
+        mem->map[i].addr_end >= entry->addr_begin) {
       return;
     }
   }
+  mem->map[entry->id - 1] = *entry;
 };
 
 void *connect_io_port(gbc_memory_t *mem, uint16_t port) {
@@ -72,55 +77,27 @@ static uint8_t mem_raw_write(void *udata, uint16_t addr, uint8_t data) {
 
   if (addr >= WRAM_BANK_0_START && addr <= WRAM_BANK_0_END) {
     mem->wram[addr - WRAM_BANK_0_START] = data;
-    return data;
-  } else if (addr >= WRAM_BANK_SWITCH_START && addr <= WRAM_BANK_SWITCH_END) {
-    uint8_t bank = mem->io_ports[IO_PORT_SVBK] & 0x07;
-    if (bank == 0)
-      bank = 1;
-    uint32_t offset = (addr - WRAM_BANK_SWITCH_START) + (bank * WRAM_BANK_SIZE);
-
-    if (offset < sizeof(mem->wram)) {
-      mem->wram[offset] = data;
-      return data;
-    }
+    return mem_write(udata, addr, data);
   } else if (addr >= HRAM_START && addr <= HRAM_END) {
     mem->hram[addr - HRAM_START] = data;
     return data;
-  } else {
-    memory_map_entry_t *entry = select_entry(mem, addr);
-    if (entry != NULL && entry->write != NULL) {
-      return entry->write(entry->udata, addr, data);
-    }
   }
 
-  return 0;
+  abort();
 }
+
 static uint8_t mem_raw_read(void *udata, uint16_t addr) {
   gbc_memory_t *mem = (gbc_memory_t *)udata;
 
   if (addr >= WRAM_BANK_0_START && addr <= WRAM_BANK_0_END) {
-    return mem->wram[addr - WRAM_BANK_0_START];
-  } else if (addr >= WRAM_BANK_SWITCH_START && addr <= WRAM_BANK_SWITCH_END) {
-    uint8_t bank = mem->io_ports[IO_PORT_SVBK] & 0x07;
-    if (bank == 0)
-      bank = 1;
-    uint32_t offset = (addr - WRAM_BANK_SWITCH_START) + (bank * WRAM_BANK_SIZE);
-
-    if (offset < sizeof(mem->wram)) {
-      return mem->wram[offset];
-    }
-    return 0xFF;
+    return mem_read(udata, addr);
   } else if (addr >= HRAM_START && addr <= HRAM_END) {
-    return mem->hram[addr - HRAM_START];
-  } else {
-    memory_map_entry_t *entry = select_entry(mem, addr);
-    if (entry != NULL && entry->read != NULL) {
-      return entry->read(entry->udata, addr);
-    }
+    return mem_read(udata, addr);
   }
 
   return 0xFF;
 }
+
 static uint8_t mem_echo_write(void *udata, uint16_t addr, uint8_t data) {
   gbc_memory_t *mem = (gbc_memory_t *)udata;
   uint16_t echo_addr = addr - ECHO_RAM_START + WRAM_BANK_0_START;
@@ -141,7 +118,17 @@ static uint8_t io_port_read(void *udata, uint16_t addr) {
   gbc_memory_t *mem = (gbc_memory_t *)udata;
   uint8_t port = addr - IO_PORT_BASE;
   if (port >= IO_REGISTERS_START_1 && port <= IO_REGISTERS_END_2) {
-    return mem->io_ports[port];
+    // return mem->io_ports[port];
+    if (port == IO_PORT_BCPD) {
+      return *((uint8_t *)(mem->bg_palette) +
+               (IO_PORT_READ(mem, IO_PORT_BCPS) & 0x3f));
+    } else if (port == IO_PORT_OCPD) {
+      return *((uint8_t *)(mem->obj_palette) +
+               (IO_PORT_READ(mem, IO_PORT_OCPS) & 0x3f));
+    } else if (port == IO_PORT_VBK) {
+      return IO_PORT_READ(mem, IO_PORT_VBK) | 0xfe;
+    }
+    return IO_PORT_READ(mem, port);
   }
   return 0;
 };
@@ -184,18 +171,17 @@ static uint8_t io_port_write(void *udata, uint16_t addr, uint8_t data) {
 };
 static inline uint8_t oam_read(void *udata, uint16_t addr) {
   gbc_memory_t *mem = (gbc_memory_t *)udata;
-  uint16_t oam_addr = addr - OAM_START + WRAM_BANK_0_START;
-  if (oam_addr >= WRAM_BANK_0_START && oam_addr <= WRAM_BANK_0_END) {
-    return mem->oam[oam_addr - WRAM_BANK_0_START];
-  }
+  uint16_t oam_addr = addr - OAM_START;
+
+  return mem->oam[oam_addr];
+
   return 0;
 };
 static inline uint8_t oam_write(void *udata, uint16_t addr, uint8_t data) {
   gbc_memory_t *mem = (gbc_memory_t *)udata;
-  uint16_t oam_addr = addr - OAM_START + WRAM_BANK_0_START;
-  if (oam_addr >= WRAM_BANK_0_START && oam_addr <= WRAM_BANK_0_END) {
-    mem->oam[oam_addr - WRAM_BANK_0_START] = data;
-  }
+  uint16_t oam_addr = addr - OAM_START;
+  mem->oam[oam_addr] = data;
+
   return data;
 };
 
@@ -296,4 +282,7 @@ static inline uint8_t hdma_transfer(gbc_memory_t *mem, uint8_t data) {
   }
 
   return data;
+}
+void *connect_io_port(gbc_memory_t *mem, uint16_t port) {
+  return (mem->io_ports + port);
 }
