@@ -77,7 +77,7 @@ static uint8_t mem_raw_write(void *udata, uint16_t addr, uint8_t data) {
 
   if (addr >= WRAM_BANK_0_START && addr <= WRAM_BANK_0_END) {
     mem->wram[addr - WRAM_BANK_0_START] = data;
-    return mem_write(udata, addr, data);
+    return data;
   } else if (addr >= HRAM_START && addr <= HRAM_END) {
     mem->hram[addr - HRAM_START] = data;
     return data;
@@ -102,7 +102,8 @@ static uint8_t mem_echo_write(void *udata, uint16_t addr, uint8_t data) {
   gbc_memory_t *mem = (gbc_memory_t *)udata;
   uint16_t echo_addr = addr - ECHO_RAM_START + WRAM_BANK_0_START;
   if (echo_addr >= WRAM_BANK_0_START && echo_addr <= WRAM_BANK_0_END) {
-    mem->wram[echo_addr - WRAM_BANK_0_START] = data;
+    // mem->wram[echo_addr - WRAM_BANK_0_START] = data;
+    mem_write(udata, echo_addr, data);
   }
   return data;
 };
@@ -110,7 +111,8 @@ static uint8_t mem_echo_read(void *udata, uint16_t addr) {
   gbc_memory_t *mem = (gbc_memory_t *)udata;
   uint16_t echo_addr = addr - ECHO_RAM_START + WRAM_BANK_0_START;
   if (echo_addr >= WRAM_BANK_0_START && echo_addr <= WRAM_BANK_0_END) {
-    return mem->wram[echo_addr - WRAM_BANK_0_START];
+    // return mem->wram[echo_addr - WRAM_BANK_0_START];
+    return mem_read(udata, echo_addr);
   }
   return 0;
 };
