@@ -68,28 +68,60 @@ void *connect_io_port(gbc_memory_t *mem, uint16_t port) {
   return NULL;
 };
 static uint8_t mem_raw_write(void *udata, uint16_t addr, uint8_t data) {
-  memory_map_entry_t *entry = select_entry((gbc_memory_t *)udata, addr);
-  if (entry == NULL) {
-    return 0;
-  }
-  if (entry->write != NULL) {
-    return entry->write(entry->udata, addr, data);
+  gbc_memory_t *mem = (gbc_memory_t *)udata;
+
+  if (addr >= WRAM_BANK_0_START && addr <= WRAM_BANK_0_END) {
+    mem->wram[addr - WRAM_BANK_0_START] = data;
+    return data;
+  } else if (addr >= WRAM_BANK_SWITCH_START && addr <= WRAM_BANK_SWITCH_END) {
+    uint8_t bank = mem->io_ports[IO_PORT_SVBK] & 0x07;
+    if (bank == 0)
+      bank = 1;
+    uint32_t offset = (addr - WRAM_BANK_SWITCH_START) + (bank * WRAM_BANK_SIZE);
+
+    if (offset < sizeof(mem->wram)) {
+      mem->wram[offset] = data;
+      return data;
+    }
+  } else if (addr >= HRAM_START && addr <= HRAM_END) {
+    mem->hram[addr - HRAM_START] = data;
+    return data;
   } else {
-    return 0;
+    memory_map_entry_t *entry = select_entry(mem, addr);
+    if (entry != NULL && entry->write != NULL) {
+      return entry->write(entry->udata, addr, data);
+    }
   }
-};
+
+  return 0;
+}
 static uint8_t mem_raw_read(void *udata, uint16_t addr) {
-  memory_map_entry_t *entry = select_entry((gbc_memory_t *)udata, addr);
-  if (entry == NULL) {
-    return 0;
-  }
-  if (entry->read != NULL) {
-    return entry->read(entry->udata, addr);
+  gbc_memory_t *mem = (gbc_memory_t *)udata;
+
+  if (addr >= WRAM_BANK_0_START && addr <= WRAM_BANK_0_END) {
+    return mem->wram[addr - WRAM_BANK_0_START];
+  } else if (addr >= WRAM_BANK_SWITCH_START && addr <= WRAM_BANK_SWITCH_END) {
+    uint8_t bank = mem->io_ports[IO_PORT_SVBK] & 0x07;
+    if (bank == 0)
+      bank = 1;
+    uint32_t offset = (addr - WRAM_BANK_SWITCH_START) + (bank * WRAM_BANK_SIZE);
+
+    if (offset < sizeof(mem->wram)) {
+      return mem->wram[offset];
+    }
+    return 0xFF;
+  } else if (addr >= HRAM_START && addr <= HRAM_END) {
+    return mem->hram[addr - HRAM_START];
   } else {
-    return 0;
+    memory_map_entry_t *entry = select_entry(mem, addr);
+    if (entry != NULL && entry->read != NULL) {
+      return entry->read(entry->udata, addr);
+    }
   }
-};
-static uint8_mem_echo_write(void *udata, uint16_t addr, uint8_t data) {
+
+  return 0xFF;
+}
+static uint8_t mem_echo_write(void *udata, uint16_t addr, uint8_t data) {
   gbc_memory_t *mem = (gbc_memory_t *)udata;
   uint16_t echo_addr = addr - ECHO_RAM_START + WRAM_BANK_0_START;
   if (echo_addr >= WRAM_BANK_0_START && echo_addr <= WRAM_BANK_0_END) {
@@ -116,10 +148,36 @@ static uint8_t io_port_read(void *udata, uint16_t addr) {
 static uint8_t io_port_write(void *udata, uint16_t addr, uint8_t data) {
   gbc_memory_t *mem = (gbc_memory_t *)udata;
   uint8_t port = addr - IO_PORT_BASE;
+
   if (port >= IO_REGISTERS_START_1 && port <= IO_REGISTERS_END_2) {
-    mem->io_ports[port] = data;
-    if (port == IO_PORT_IE) {
-      mem->io_ports[IO_PORT_IF] |= data;
+    // Handle special registers
+    switch (port) {
+    case IO_PORT_DMA:
+      // Trigger DMA transfer
+      io_dma_transfer(mem, data);
+      break;
+
+    case IO_PORT_HDMA5:
+      // Handle HDMA transfer
+      return hdma_transfer(mem, data);
+
+    case IO_PORT_IF:
+      // Writing to IF register ANDs with existing value
+      mem->io_ports[port] &= data;
+      return data;
+
+    case IO_PORT_DIV:
+      // Writing any value to DIV resets it to 0
+      mem->io_ports[port] = 0;
+      return 0;
+
+    case IO_PORT_IE:
+      mem->io_ports[port] |= data;
+      return data;
+
+    default:
+      mem->io_ports[port] = data;
+      break;
     }
   }
   return data;
@@ -144,40 +202,98 @@ static inline uint8_t oam_write(void *udata, uint16_t addr, uint8_t data) {
 static uint8_t bank_n_write(void *udata, uint16_t addr, uint8_t data) {
   gbc_memory_t *mem = (gbc_memory_t *)udata;
 
-  uint16_t bank_addr = addr - WRAM_BANK_SWITCH_START + WRAM_BANK_0_START;
-  if (bank_addr >= WRAM_BANK_0_START && bank_addr <= WRAM_BANK_0_END) {
-    mem->wram[bank_addr - WRAM_BANK_0_START] = data;
+  uint8_t bank = mem->io_ports[IO_PORT_SVBK] & 0x07;
+  if (bank == 0)
+    bank = 1;
+
+  uint32_t offset = (addr - WRAM_BANK_SWITCH_START) + (bank * WRAM_BANK_SIZE);
+
+  if (offset < sizeof(mem->wram)) {
+    mem->wram[offset] = data;
   }
   return data;
 };
+
 static uint8_t bank_n_read(void *udata, uint16_t addr) {
   gbc_memory_t *mem = (gbc_memory_t *)udata;
-  uint16_t bank_addr = addr - WRAM_BANK_SWITCH_START + WRAM_BANK_0_START;
-  if (bank_addr >= WRAM_BANK_0_START && bank_addr <= WRAM_BANK_0_END) {
-    return mem->wram[bank_addr - WRAM_BANK_0_START];
+
+  uint8_t bank = mem->io_ports[IO_PORT_SVBK] & 0x07;
+  if (bank == 0)
+    bank = 1;
+
+  uint32_t offset = (addr - WRAM_BANK_SWITCH_START) + (bank * WRAM_BANK_SIZE);
+
+  if (offset < sizeof(mem->wram)) {
+    return mem->wram[offset];
   }
-  return 0;
+  return 0xFF;
 };
 static uint8_t not_usable_write(void *udata, uint16_t addr, uint8_t data) {
-  gbc_memory_t *mem = (gbc_memory_t *)udata;
-  uint16_t not_usable_addr = addr - NON_USABLE_START + NON_USABLE_END;
-  if (not_usable_addr >= NON_USABLE_START &&
-      not_usable_addr <= NON_USABLE_END) {
-    mem->wram[not_usable_addr - NON_USABLE_START] = data;
+  if (addr >= NON_USABLE_START && addr <= NON_USABLE_END) {
+    return 0xFF;
   }
-  return data;
-};
-static uint8_t not_usable_read(void *udata, uint16_t addr) {
-  gbc_memory_t *mem = (gbc_memory_t *)udata;
-  uint16_t not_usable_addr = addr - NON_USABLE_START + NON_USABLE_END;
-  if (not_usable_addr >= NON_USABLE_START &&
-      not_usable_addr <= NON_USABLE_END) {
-    return mem->wram[not_usable_addr - NON_USABLE_START];
-  }
-  return 0;
+  return 0xFF;
 };
 
-static inline void io_dma_transfer(gbc_memory_t *mem, uint8_t addr) {}
+static uint8_t not_usable_read(void *udata, uint16_t addr) { return 0xFF; };
+
+static inline void io_dma_transfer(gbc_memory_t *mem, uint8_t addr) {
+  uint16_t source = (uint16_t)addr << 8;
+
+  uint16_t dest = OAM_START;
+
+  for (uint16_t i = 0; i < 0xA0; i++) {
+    uint8_t value = mem_raw_read(mem, source + i);
+    mem_raw_write(mem, dest + i, value);
+  }
+}
 static inline uint8_t hdma_transfer(gbc_memory_t *mem, uint8_t data) {
+  // Get the source address from HDMA1 and HDMA2 registers
+  uint16_t source = ((uint16_t)mem->io_ports[IO_PORT_HDMA1] << 8) |
+                    mem->io_ports[IO_PORT_HDMA2];
+  // Mask lower 4 bits as they are ignored (treated as 0)
+  source &= 0xFFF0;
 
-};
+  // Get the destination address from HDMA3 and HDMA4 registers
+  uint16_t dest = ((uint16_t)mem->io_ports[IO_PORT_HDMA3] << 8) |
+                  mem->io_ports[IO_PORT_HDMA4];
+  // Destination is always in VRAM (0x8000-0x9FF0)
+  dest = 0x8000 | (dest & 0x1FF0);
+
+  // Extract transfer mode and length
+  uint8_t mode = data >> 7;     // 0 = General Purpose DMA, 1 = HBlank DMA
+  uint8_t length = data & 0x7F; // Transfer length (divided by $10, minus 1)
+  uint16_t bytes = ((uint16_t)length + 1) * 0x10; // Calculate actual byte count
+
+  // Handle transfer termination for HBlank mode
+  if (mode == 0 && (mem->io_ports[IO_PORT_HDMA5] & 0x80)) {
+    // If writing 0 to bit 7 while an HBlank transfer is active, terminate it
+    mem->io_ports[IO_PORT_HDMA5] =
+        0x80 | length; // Set bit 7 and preserve length
+    return 0xFF;       // Transfer terminated
+  }
+
+  // Perform General Purpose DMA (all at once)
+  if (mode == 0) {
+    // Copy bytes from source to destination
+    for (uint16_t i = 0; i < bytes; i++) {
+      uint8_t value = mem_raw_read(mem, source + i);
+      mem_raw_write(mem, dest + i, value);
+    }
+
+    // Transfer complete, set HDMA5 to 0xFF
+    mem->io_ports[IO_PORT_HDMA5] = 0xFF;
+  }
+  // Set up HBlank DMA
+  else {
+    // Store transfer details in IO_PORT_HDMA5
+    mem->io_ports[IO_PORT_HDMA5] = data;
+
+    // Note: The actual HBlank transfer should be handled by the PPU/LCD
+    // controller during HBlank periods. This function just sets up the
+    // transfer. Additional code will be needed in the LCD/PPU emulation to
+    // handle the transfer of 0x10 bytes during each HBlank.
+  }
+
+  return data;
+}
