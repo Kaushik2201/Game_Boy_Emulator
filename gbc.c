@@ -17,7 +17,7 @@ int gbc_init(gbc_t *gbc, const char *game_rom, const char *boot_rom) {
 
   FILE *game_rom_file = fopen(game_rom, "rb");
   if (!game_rom_file) {
-    fprintf(stderr, "Failed to open game ROM file: %s\n", game_rom);
+    LOG_ERROR("Failed to open game ROM file: %s\n", game_rom);
     return -1;
   }
 
@@ -29,7 +29,7 @@ int gbc_init(gbc_t *gbc, const char *game_rom, const char *boot_rom) {
   // Allocate memory and read the ROM data
   uint8_t *rom_data = (uint8_t *)malloc(rom_size);
   if (!rom_data) {
-    fprintf(stderr, "Failed to allocate memory for game ROM\n");
+    LOG_ERROR("Failed to allocate memory for game ROM\n");
     fclose(game_rom_file);
     return -1;
   }
@@ -37,8 +37,15 @@ int gbc_init(gbc_t *gbc, const char *game_rom, const char *boot_rom) {
   fclose(game_rom_file);
 
   // Load the ROM data into the cartridge
-  cartridge_load(rom_data);
-  free(rom_data);
+  cartridge_t *cart = cartridge_load(rom_data);
+  gbc_mbc_init_with_cart(&gbc->mbc, cart);
+  WRITE_R16(&gbc->cpu.reg, REG_PC, 0x100);
+  if (boot_rom) {
+    bootload(gbc, boot_rom);
+    WRITE_R16(&gbc->cpu.reg, REG_PC, 0x000);
+  } else {
+    LOG_ERROR("No boot ROM provided, skipping boot ROM loading\n");
+  }
 
   return 0;
 };
@@ -68,7 +75,7 @@ void bootload(gbc_t *gbc, const char *boot_rom_path) {
   // Load the boot ROM into memory
   FILE *boot_rom_file = fopen(boot_rom_path, "rb");
   if (!boot_rom_file) {
-    fprintf(stderr, "Failed to open boot ROM file: %s\n", boot_rom_path);
+    LOG_ERROR("Failed to open boot ROM file: %s\n", boot_rom_path);
     return;
   }
   fread(gbc->mem.boot_rom, 1, GBC_BOOT_ROM_SIZE, boot_rom_file);

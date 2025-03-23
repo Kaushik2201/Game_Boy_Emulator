@@ -25,4 +25,4 @@ typedef struct {
 
 int gbc_init(gbc_t *gbc, const char *game_rom, const char *boot_rom);
 void gbc_run(gbc_t *gbc);
-void bootload(gbc_t *gbc);
+void bootload(gbc_t *gbc, const char *boot_rom_path);
