@@ -1,6 +1,7 @@
 {
   "files.associations": {
     "cstdint": "cpp",
-    "memory.h": "c"
+    "memory.h": "c",
+    "gbc.h": "c"
   }
 }
