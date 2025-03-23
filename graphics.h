@@ -89,27 +89,26 @@ typedef void (*screen_write)(void *udata, uint16_t addr, uint16_t data);
     ((td)->data[y * 2 + 1] & (1 << (7 - x)) ? 2 : 0)
 
 
-typedef struct {
+typedef struct gbc_tile{
     uint8_t data[16];       //Because tile has 8x8 pixels of 2bits each
-} gbc_tile;
+} gbc_tile_t;
 
-typedef struct{
+typedef struct gbc_tilemap{
     uint8_t tile_indices[32][32];           //Tile indices for a map 32*32
-} gbc_tilemap;
+} gbc_tilemap_t;
 
-typedef struct{
+typedef struct gbc_tilemap_attr{
     uint8_t data[32][32];      //Tile attributes(for CGB mode)
-} gbc_tilemap_attributes;
+} gbc_tilemap_attr_t;
 
-typedef struct{
+typedef struct gbc_obj{
     uint8_t y_pos;
     uint8_t x_pos;
     uint8_t tile_index;
     uint8_t attributes;
-} gbc_obj;
+} gbc_obj_t;
 
-typedef struct 
-{
+typedef struct gbc_graphic{
     uint32_t dots;   /* dots to next graphic update */
     uint8_t vram[VRAM_BANK_SIZE * 2]; /* 2x8KB */
     uint8_t scanline;
@@ -127,4 +126,4 @@ void gbc_graphic_connect(gbc_graphic_t *graphic, gbc_memory_t *mem);
 void gbc_graphic_init(gbc_graphic_t *graphic);
 void gbc_graphic_cycle(gbc_graphic_t *graphic);
 uint8_t* gbc_graphic_get_tile_attr(gbc_graphic_t *graphic, uint8_t type, uint8_t idx);
-gbc_tile* gbc_graphic_get_tile(gbc_graphic_t *graphic, uint8_t type, uint8_t idx, uint8_t bank);
+gbc_tile_t* gbc_graphic_get_tile(gbc_graphic_t *graphic, uint8_t type, uint8_t idx, uint8_t bank);
