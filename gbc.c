@@ -14,6 +14,32 @@ int gbc_init(gbc_t *gbc, const char *game_rom, const char *boot_rom) {
   gbc_graphic_connect(&gbc->graphics, &gbc->mem);
   gbc_mbc_connect(&gbc->mbc, &gbc->mem);
   timer_connect();
+
+  FILE *game_rom_file = fopen(game_rom, "rb");
+  if (!game_rom_file) {
+    fprintf(stderr, "Failed to open game ROM file: %s\n", game_rom);
+    return -1;
+  }
+
+  // Get the file size of the game ROM
+  fseek(game_rom_file, 0, SEEK_END);
+  long rom_size = ftell(game_rom_file);
+  fseek(game_rom_file, 0, SEEK_SET);
+
+  // Allocate memory and read the ROM data
+  uint8_t *rom_data = (uint8_t *)malloc(rom_size);
+  if (!rom_data) {
+    fprintf(stderr, "Failed to allocate memory for game ROM\n");
+    fclose(game_rom_file);
+    return -1;
+  }
+  fread(rom_data, 1, rom_size, game_rom_file);
+  fclose(game_rom_file);
+
+  // Load the ROM data into the cartridge
+  cartridge_load(rom_data);
+  free(rom_data);
+
   return 0;
 };
 void gbc_run(gbc_t *gbc) {
@@ -36,4 +62,16 @@ void gbc_run(gbc_t *gbc) {
       cycles++;
     }
   }
+}
+
+void bootload(gbc_t *gbc, const char *boot_rom_path) {
+  // Load the boot ROM into memory
+  FILE *boot_rom_file = fopen(boot_rom_path, "rb");
+  if (!boot_rom_file) {
+    fprintf(stderr, "Failed to open boot ROM file: %s\n", boot_rom_path);
+    return;
+  }
+  fread(gbc->mem.boot_rom, 1, GBC_BOOT_ROM_SIZE, boot_rom_file);
+  fclose(boot_rom_file);
+  gbc->mem.boot_rom_enabled = 1;
 }
