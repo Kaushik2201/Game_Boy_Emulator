@@ -2,6 +2,7 @@
 #define IO_H
 
 #include <stdint.h>
+// #include "memory.h"
 
 #define KEY_DPAD     0x10
 #define KEY_BUTTON   0x20
@@ -19,12 +20,13 @@
 #define BUTTON_MASK  (KEY_A | KEY_B | KEY_START | KEY_SELECT)
 // Memory struct
 typedef struct {
-    uint8_t *memory;
+    gbc_memory_t *memory;
+    uint8_t (*poll_keypad)();
 } gbc_io_t;
 
 // Function declarations
-void io_connect(gbc_io_t *io, uint8_t *memory);
+void io_connect(gbc_io_t *io, gbc_memory_t *memory);
 void io_init(gbc_io_t *io);
-void io_cleanup(gbc_io_t *io);
+void io_cycle(gbc_io_t *io);
 
 #endif 
