@@ -148,7 +148,22 @@ struct gbc_cpu{
 #define SET_R_FLAG(reg, flag) WRITE_R8(reg, REG_F, (READ_R8(reg, REG_F) | flag))
 #define CLEAR_R_FLAG(reg, flag) WRITE_R8(reg, REG_F, (READ_R8(reg, REG_F) & ~flag))
 #define SET_R_FLAG_VALUE(reg, flag, value) ((value) ? (SET_R_FLAG(reg, flag)) : (CLEAR_R_FLAG(reg, flag)))
+//CPU STRUCT
+typedef struct gbc_cpu {
+    cpu_register_t reg;
+    memory_read mem_read;  /* memory op */
+    memory_write mem_write;
+    void *mem_data;
+    uint8_t *ifp;           /* interrupt flag 'pointer'(it is a pointer to io port) */
 
+    uint64_t cycles;
+    uint16_t ins_cycles;   /* current instruction cost */
+    uint8_t ime;           /* interrupt master enable */
+    uint8_t ier;           /* interrupt enable register */
+    uint8_t ime_insts:4;   /* instruction count to set ime */
+    uint8_t halt:2;        /* halt state */
+    uint8_t dspeed:1;      /* doublespeed state */
+} gbc_cpu_t;
 
 /* https://gbdev.io/pandocs/CGB_Registers.html#ff4d--key1-cgb-mode-only-prepare-speed-switch */
 #define KEY1_CPU_SWITCH_ARMED 0x1
