@@ -1,10 +1,12 @@
-#pragma once
+#ifndef _CPU_H
+#define _CPU_H
 
 #include<stdint.h>
 #include"memory.h"
 
 
 typedef struct cpu_register cpu_register_t;
+typedef struct gbc_cpu gbc_cpu_t;
 
 
 
@@ -92,11 +94,36 @@ struct cpu_register
     #define REG_L _REG_8_OFFSET(H, L, L)
 };
 
-#define swap_i16(value) (uint16_t)((value >> 8) | (value << 8));
+//CPU STRUCT
+struct gbc_cpu{
+    cpu_register_t reg;
+    memory_read mem_read;  /* memory op */
+    memory_write mem_write;
+    void *mem_data;
+    uint8_t *ifp;           /* interrupt flag 'pointer'(it is a pointer to io port) */
 
+    uint64_t cycles;
+    uint16_t ins_cycles;   /* current instruction cost */
+    uint8_t ime;           /* interrupt master enable */
+    uint8_t ier;           /* interrupt enable register */
+    uint8_t ime_insts:4;   /* instruction count to set ime */
+    uint8_t halt:2;        /* halt state */
+    uint8_t dspeed:1;      /* doublespeed state */
+};
+
+
+#define IS_LITTLE_ENDIAN 'ABCD' == 0x41424344
+
+
+#if (IS_LITTLE_ENDIAN)
 #define READ_I16(reg) reg                  /* immediate 16-bit */
 #define READ_16(reg) reg
 #define WRITE_16(reg, value) (reg) = (value)
+#else
+#define READ_I16(reg)
+#define READ_16(reg) swap_i16(reg)
+#define WRITE_16(reg, value) (reg) = swap_i16(value)
+#endif
 
 #define READ_I8(reg) (reg)                  /* immediate 8-bit */
 #define READ_8(reg) (reg)
@@ -149,3 +176,4 @@ void gbc_cpu_cycle(gbc_cpu_t *cpu);
 /* ORDER: "PC", "SP", "A", "F", "B", "C", "D", "E", "H", "L", "Z", "N", "H", "C", "IME", "IE", "IF" */
 #define DEBUG_CPU_REGISTERS_SIZE 17
 void debug_get_all_registers(gbc_cpu_t *cpu, int values[DEBUG_CPU_REGISTERS_SIZE]);
+#endif
