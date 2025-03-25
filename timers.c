@@ -6,7 +6,8 @@
 #include <string.h>
 
 // Define the array of timer modes
-static const uint16_t timer_modes[4] = {
+static const 
+uint16_t timer_modes[4] = {
     TAC_MODE_0_CYCLES,
     TAC_MODE_1_CYCLES,
     TAC_MODE_2_CYCLES,
@@ -14,7 +15,9 @@ static const uint16_t timer_modes[4] = {
 };
 
 // Initialize the timer
-void gbc_timer_init(gbc_timer_t *timer) {
+void 
+gbc_timer_init(gbc_timer_t *timer) 
+{
     if (timer == NULL) {
         return;
     }
@@ -23,7 +26,9 @@ void gbc_timer_init(gbc_timer_t *timer) {
 }
 
 // Connect the timer to the memory
-void gbc_timer_connect(gbc_timer_t *timer, gbc_memory_t *mem) {
+void 
+gbc_timer_connect(gbc_timer_t *timer, gbc_memory_t *mem) 
+{
     if (timer == NULL || mem == NULL) {
         return;
     }
@@ -36,18 +41,12 @@ void gbc_timer_connect(gbc_timer_t *timer, gbc_memory_t *mem) {
     timer->timap = connect_io_port(mem, IO_PORT_TIMA);
     timer->tmap = connect_io_port(mem, IO_PORT_TMA);
     timer->tacp = connect_io_port(mem, IO_PORT_TAC);
-
-    // Initialize the timer registers
-    *timer->divp = 0;
-    *timer->timap = 0;
-    *timer->tmap = 0;
-    *timer->tacp = 0;
-    timer->div_cycles = 0;
-    timer->timer_cycles = 0;
 }
 
 // Cycle the timer
-void gbc_timer_cycle(gbc_timer_t *timer) {
+void 
+gbc_timer_cycle(gbc_timer_t *timer) 
+{
     if (timer == NULL || timer->mem == NULL) {
         return;
     }
@@ -59,21 +58,23 @@ void gbc_timer_cycle(gbc_timer_t *timer) {
         (*timer->divp)++;
     }
 
+    if (!(*timer->tacp & TAC_TIMER_ENABLE)) {
+        return;
+    }
+
     // Check if the timer is enabled
-    if (*timer->tacp & TAC_TIMER_ENABLE) {
-        uint16_t threshold = timer_modes[*timer->tacp & TAC_TIMER_SPEED_MASK];
+    uint8_t mode = *timer->tacp & TAC_TIMER_SPEED_MASK;
+    uint16_t cycles = timer_modes[mode];
 
-        // Increment the timer counter
-        timer->timer_cycles++;
-        if (timer->timer_cycles >= threshold) {
-            timer->timer_cycles = 0;
-            (*timer->timap)++;
+    uint16_t tima = *timer->timap;
 
-            // Handle overflow
-            if (*timer->timap == 0) {
-                *timer->timap = *timer->tmap;
-                REQUEST_INTERRUPT(timer->mem, INTERRUPT_TIMER);
-            }
+    if (++timer->timer_cycles == cycles) {
+        timer->timer_cycles = 0;
+        tima += 1;
+        if (tima > 0xFF) {
+            *timer->timap = *timer->tmap;
+            REQUEST_INTERRUPT(timer->mem, INTERRUPT_TIMER);
         }
+        IO_PORT_WRITE(timer->mem, IO_PORT_TIMA, tima);
     }
 }
