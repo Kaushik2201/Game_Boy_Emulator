@@ -33,6 +33,7 @@ typedef void (*screen_write)(void *udata, uint16_t addr, uint16_t data);
 #define PPU_MODE_2 2    //OAM_SCAN
 #define PPU_MODE_1 1    //VBLANK
 #define PPU_MODE_0 0    //HBLANK
+#define PPU_MODE_MASK 0x03
 
 //Dots per PPU Mode
 #define PPU_MODE_0_DOTS 100
@@ -78,7 +79,7 @@ typedef void (*screen_write)(void *udata, uint16_t addr, uint16_t data);
 #define GBC_COLOR_TO_RGB_B(x) (((x & 0x7C00) >> 10) * 0xFF / 0x1F)
 
 #define MAX_OBJ_SCANLINE 10
-#define MAX_OBJS ((OAM_END - OAM_BEGIN + 1) / 4)
+#define MAX_OBJS ((OAM_END - OAM_START + 1) / 4)
 
 #define OAM_Y_TO_SCREEN(y) ((y) - 16)
 #define OAM_X_TO_SCREEN(x) ((x) - 8)

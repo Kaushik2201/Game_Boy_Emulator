@@ -361,7 +361,7 @@ if (graphic->dots--) {
                 graphic->dots = PPU_MODE_0_DOTS;
                 graphic->mode = PPU_MODE_0;
                 if (io_stat & STAT_MODE_0_INTERRUPT) {
-                    REQUEST_INTERRUPT(graphic->mem, INTERRUPT_LCD);
+                    REQUEST_INTERRUPT(graphic->mem, INTERRUPT_LCD_STAT);
                 }
 
             } else if (graphic->mode == PPU_MODE_2) {
@@ -377,14 +377,14 @@ if (graphic->dots--) {
                 graphic->dots = PPU_MODE_2_DOTS;
                 graphic->mode = PPU_MODE_2;
                 if (io_stat & STAT_MODE_2_INTERRUPT) {
-                    REQUEST_INTERRUPT(graphic->mem, INTERRUPT_LCD);
+                    REQUEST_INTERRUPT(graphic->mem, INTERRUPT_LCD_STAT);
                 }
             }
         } else {
             /* V-BLANK */
             if (graphic->mode != PPU_MODE_1) {
                 if (io_stat & STAT_MODE_1_INTERRUPT) {
-                    REQUEST_INTERRUPT(graphic->mem, INTERRUPT_LCD);
+                    REQUEST_INTERRUPT(graphic->mem, INTERRUPT_LCD_STAT);
                 }
                 REQUEST_INTERRUPT(graphic->mem, INTERRUPT_VBLANK);
                 graphic->mode = PPU_MODE_1;
@@ -408,7 +408,7 @@ if (graphic->dots--) {
             if (lyc == scanline) {
                 io_stat |= STAT_LYC_LY;
                 if (io_stat & STAT_LYC_INTERRUPT) {
-                    REQUEST_INTERRUPT(graphic->mem, INTERRUPT_LCD);
+                    REQUEST_INTERRUPT(graphic->mem, INTERRUPT_LCD_STAT);
                 }
             }
         }
