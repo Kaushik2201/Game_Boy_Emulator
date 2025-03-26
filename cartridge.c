@@ -5,16 +5,14 @@
 
 #define LOGO_ROW 8
 
-static 
-uint8_t NINTENDO_LOGO[0x30] = {
+static uint8_t NINTENDO_LOGO[0x30] = {
     0xCE, 0xED, 0x66, 0x66, 0xCC, 0x0D, 0x00, 0x0B, 0x03, 0x73, 0x00, 0x83, 0x00, 0x0C, 0x00, 0x0D,
     0x00, 0x08, 0x11, 0x1F, 0x88, 0x89, 0x00, 0x0E, 0xDC, 0xCC, 0x6E, 0xE6, 0xDD, 0xDD, 0xD9, 0x99,
     0xBB, 0xBB, 0x67, 0x63, 0x6E, 0x0E, 0xEC, 0xCC, 0xDD, 0xDC, 0x99, 0x9F, 0xBB, 0xB9, 0x33, 0x3E
 };
 
 
-int 
-validate_logo(uint8_t *data)
+int validate_logo(uint8_t *data)
 {
     for (int i = 0; i < sizeof(NINTENDO_LOGO); i++) {
         if (data[i] != NINTENDO_LOGO[i])
@@ -25,8 +23,7 @@ validate_logo(uint8_t *data)
 }
 
 
-int 
-validate_checksum(uint8_t *data)
+int validate_checksum(uint8_t *data)
 {
     uint8_t checksum = 0;
     for (int address = 0x0134; address <= 0x014C; address++) {
@@ -35,8 +32,7 @@ validate_checksum(uint8_t *data)
     return (checksum == data[0x014D]);
 }
 
-cartridge_t* 
-cartridge_load(uint8_t *data)
+cartridge_t* cartridge_load(uint8_t *data)
 {
     cartridge_t *cartridge = (cartridge_t*)data;
     if(!validate_logo(cartridge->logo)){

@@ -13,8 +13,7 @@ uint8_t mbc3_write(gbc_mbc_t *mbc, uint16_t addr, uint8_t data);
 uint8_t mbc5_read(gbc_mbc_t *mbc, uint16_t addr);
 uint8_t mbc5_write(gbc_mbc_t *mbc, uint16_t addr, uint8_t data);
 
-uint8_t
-mbc_read(void *udata, uint16_t addr)
+uint8_t mbc_read(void *udata, uint16_t addr)
 {
     gbc_mbc_t *mbc = (gbc_mbc_t*)udata;
     if (mbc->mem->boot_rom_enabled && !IN_RANGE(addr, 0x100, 0x1ff)) {
@@ -29,8 +28,7 @@ uint8_t mbc_write(void *udata, uint16_t addr, uint8_t data)
     return mbc->write(mbc, addr, data);
 }
 
-void
-gbc_mbc_init(gbc_mbc_t *mbc)
+void gbc_mbc_init(gbc_mbc_t *mbc)
 {
     mbc->rom_banks = NULL;
     mbc->rom_bank = 0;
@@ -44,8 +42,7 @@ gbc_mbc_init(gbc_mbc_t *mbc)
     mbc->write = mbc1_write;
 }
 
-void
-gbc_mbc_connect(gbc_mbc_t *mbc, gbc_memory_t *mem)
+void gbc_mbc_connect(gbc_mbc_t *mbc, gbc_memory_t *mem)
 {
     mbc->mem = mem;
 
@@ -78,8 +75,7 @@ gbc_mbc_connect(gbc_mbc_t *mbc, gbc_memory_t *mem)
     register_memory_map(mem, &entry);
 }
 
-void
-gbc_mbc_init_with_cart(gbc_mbc_t *mbc, cartridge_t *cart)
+void gbc_mbc_init_with_cart(gbc_mbc_t *mbc, cartridge_t *cart)
 {
     mbc->rom_bank_size = cartridge_rom_banks(cart);
 
@@ -137,8 +133,7 @@ gbc_mbc_init_with_cart(gbc_mbc_t *mbc, cartridge_t *cart)
 }
 
 
-static uint32_t
-translate_mbc1_addr(gbc_mbc_t *mbc, uint16_t raw_addr)
+static uint32_t translate_mbc1_addr(gbc_mbc_t *mbc, uint16_t raw_addr)
 {
     uint32_t addr = raw_addr;
     if (IN_RANGE(addr, MBC1_ROM_BANK_N_BEGIN, MBC1_ROM_BANK_N_END)) {
@@ -159,8 +154,7 @@ translate_mbc1_addr(gbc_mbc_t *mbc, uint16_t raw_addr)
 }
 
 
-static uint32_t
-translate_mbc5_addr(gbc_mbc_t *mbc, uint16_t raw_addr)
+static uint32_t translate_mbc5_addr(gbc_mbc_t *mbc, uint16_t raw_addr)
 {
     uint32_t addr = raw_addr;
     if (IN_RANGE(addr, MBC1_ROM_BANK_N_BEGIN, MBC1_ROM_BANK_N_END)) {
@@ -174,8 +168,7 @@ translate_mbc5_addr(gbc_mbc_t *mbc, uint16_t raw_addr)
     return addr;
 }
 
-uint8_t
-mbc1_read(gbc_mbc_t *mbc, uint16_t addr)
+uint8_t mbc1_read(gbc_mbc_t *mbc, uint16_t addr)
 {
     LOG_DEBUG("[MBC1] Reading from MBC1 at address %x\n", addr);
 
@@ -216,8 +209,7 @@ mbc1_read(gbc_mbc_t *mbc, uint16_t addr)
     abort();
 }
 
-uint8_t
-mbc1_write(gbc_mbc_t *mbc, uint16_t addr, uint8_t data)
+uint8_t mbc1_write(gbc_mbc_t *mbc, uint16_t addr, uint8_t data)
 {
     LOG_DEBUG("[MBC1] Writing to MBC1 at address %x [%x]\n", addr, data);
     uint8_t result;
@@ -281,8 +273,7 @@ mbc1_write(gbc_mbc_t *mbc, uint16_t addr, uint8_t data)
     return data;
 }
 
-uint8_t
-mbc5_read(gbc_mbc_t *mbc, uint16_t addr)
+uint8_t mbc5_read(gbc_mbc_t *mbc, uint16_t addr)
 {
     LOG_DEBUG("[MBC5] Reading from MBC5 at address %x\n", addr);
 
@@ -323,8 +314,7 @@ mbc5_read(gbc_mbc_t *mbc, uint16_t addr)
     abort();
 }
 
-uint8_t
-mbc5_write(gbc_mbc_t *mbc, uint16_t addr, uint8_t data)
+uint8_t mbc5_write(gbc_mbc_t *mbc, uint16_t addr, uint8_t data)
 {
     LOG_DEBUG("[MBC5] Writing to MBC1 at address %x [%x]\n", addr, data);
     uint8_t result;
@@ -385,8 +375,7 @@ mbc5_write(gbc_mbc_t *mbc, uint16_t addr, uint8_t data)
     return data;
 }
 
-uint8_t
-mbc3_read(gbc_mbc_t *mbc, uint16_t addr)
+uint8_t mbc3_read(gbc_mbc_t *mbc, uint16_t addr)
 {
     LOG_DEBUG("[MBC3] Reading from MBC3 at address %x\n", addr);
     /* TODO */
@@ -394,8 +383,7 @@ mbc3_read(gbc_mbc_t *mbc, uint16_t addr)
     return 0;
 }
 
-uint8_t
-mbc3_write(gbc_mbc_t *mbc, uint16_t addr, uint8_t data)
+uint8_t mbc3_write(gbc_mbc_t *mbc, uint16_t addr, uint8_t data)
 {
     LOG_DEBUG("[MBC3] Writing to MBC3 at address %x [%x]\n", addr, data);
     /* TODO */
