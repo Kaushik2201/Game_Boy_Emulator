@@ -1,8 +1,0 @@
-{
-  "files.associations": {
-    "cstdint": "cpp",
-    "memory.h": "c",
-    "gbc.h": "c",
-    "common.h": "c"
-  }
-}
