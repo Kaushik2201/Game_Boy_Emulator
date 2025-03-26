@@ -6,8 +6,7 @@
 #include <string.h>
 
 // Define the array of timer modes
-static const 
-uint16_t timer_modes[4] = {
+static const uint16_t timer_modes[4] = {
     TAC_MODE_0_CYCLES,
     TAC_MODE_1_CYCLES,
     TAC_MODE_2_CYCLES,
@@ -15,8 +14,7 @@ uint16_t timer_modes[4] = {
 };
 
 // Initialize the timer
-void 
-gbc_timer_init(gbc_timer_t *timer) 
+void gbc_timer_init(gbc_timer_t *timer) 
 {
     if (timer == NULL) {
         return;
@@ -26,8 +24,7 @@ gbc_timer_init(gbc_timer_t *timer)
 }
 
 // Connect the timer to the memory
-void 
-gbc_timer_connect(gbc_timer_t *timer, gbc_memory_t *mem) 
+void gbc_timer_connect(gbc_timer_t *timer, gbc_memory_t *mem) 
 {
     if (timer == NULL || mem == NULL) {
         return;
@@ -44,8 +41,7 @@ gbc_timer_connect(gbc_timer_t *timer, gbc_memory_t *mem)
 }
 
 // Cycle the timer
-void 
-gbc_timer_cycle(gbc_timer_t *timer) 
+void gbc_timer_cycle(gbc_timer_t *timer) 
 {
     if (timer == NULL || timer->mem == NULL) {
         return;

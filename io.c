@@ -5,8 +5,7 @@
 #include <stdio.h>
 
 // Connect the I/O system to the memory
-void 
-io_connect(gbc_io_t *io, gbc_memory_t *memory) 
+void io_connect(gbc_io_t *io, gbc_memory_t *memory) 
 {
     if (io == NULL || memory == NULL) {
         return;
@@ -15,8 +14,7 @@ io_connect(gbc_io_t *io, gbc_memory_t *memory)
 }
 
 // Initialize the I/O system
-void 
-io_init(gbc_io_t *io) 
+void io_init(gbc_io_t *io) 
 {
     if (io == NULL) {
         return;
@@ -26,8 +24,7 @@ io_init(gbc_io_t *io)
 }
 
 // Poll the keypad for input based on P1 register
-void 
-poll_keypad(void *udata) 
+void poll_keypad(void *udata) 
 {
     gbc_io_t *io = (gbc_io_t *)udata;
     if (io == NULL || io->memory == NULL || io->poll_keypad == NULL) {
@@ -47,8 +44,7 @@ poll_keypad(void *udata)
 }
 
 // Update the I/O system for one CPU cycle
-void 
-io_cycle(gbc_io_t *io) 
+void io_cycle(gbc_io_t *io) 
 {
     if (io == NULL || io->memory == NULL) {
         return;

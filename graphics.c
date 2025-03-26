@@ -6,45 +6,28 @@
 
 
 
-inline static void*
-vram_addr_bank(void *udata, uint16_t addr, uint8_t bank)
+inline static void* vram_addr_bank(void *udata, uint16_t addr, uint8_t bank)
 {
     gbc_graphic_t* g = (gbc_graphic_t*)udata;
     uint16_t real_addr = (bank *VRAM_BANK_SIZE) + (addr - VRAM_START);
     return g->vram + real_addr;
 }
 
-inline static void*
-vram_addr(void *udata, uint16_t addr)
+inline static void* vram_addr(void *udata, uint16_t addr)
 {
     gbc_graphic_t* g = (gbc_graphic_t*)udata;
     uint8_t bank = IO_PORT_READ(g->mem, IO_PORT_VBK) & 0x1;
     return vram_addr_bank(udata, addr, bank); 
 }
 
-void
-gbc_graphic_init(gbc_graphic_t *graphic)
+void gbc_graphic_init(gbc_graphic_t *graphic)
 {
     memset(graphic, 0, sizeof(gbc_graphic_t));
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Get a tile from VRAM
-gbc_tile_t* 
-gbc_graphic_get_tile(gbc_graphic_t *graphic, uint8_t type, uint8_t idx, uint8_t bank) 
+gbc_tile_t* gbc_graphic_get_tile(gbc_graphic_t *graphic, uint8_t type, uint8_t idx, uint8_t bank) 
 {
     if (graphic == NULL || graphic->mem == NULL) {
         return NULL;  // Null check
@@ -65,22 +48,8 @@ gbc_graphic_get_tile(gbc_graphic_t *graphic, uint8_t type, uint8_t idx, uint8_t 
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Get tilemap attributes for the background or window
-gbc_tilemap_attr_t* 
-gbc_graphic_get_tilemap_attr(gbc_graphic_t *graphic, uint8_t type) 
+gbc_tilemap_attr_t* gbc_graphic_get_tilemap_attr(gbc_graphic_t *graphic, uint8_t type) 
 {
     if (graphic == NULL || graphic->mem == NULL) {
         return NULL;  // Null check
@@ -106,8 +75,7 @@ gbc_graphic_get_tilemap_attr(gbc_graphic_t *graphic, uint8_t type)
 
 
 // Get tilemap data for the background or window
-gbc_tilemap_t* 
-gbc_graphic_get_tilemap(gbc_graphic_t *graphic, uint8_t type) 
+gbc_tilemap_t* gbc_graphic_get_tilemap(gbc_graphic_t *graphic, uint8_t type) 
 {
     if (graphic == NULL || graphic->mem == NULL) {
         return NULL;  // Null check
@@ -131,8 +99,7 @@ gbc_graphic_get_tilemap(gbc_graphic_t *graphic, uint8_t type)
     return (gbc_tilemap_t*)vram_addr_bank(graphic, tilemap_addr, 0);
 }
 
-inline static uint16_t
- gbc_graphic_render_pixel(gbc_graphic_t *graphic, uint16_t scanline, int16_t col, uint8_t *objs_idx, uint8_t objs_count) 
+inline static uint16_t gbc_graphic_render_pixel(gbc_graphic_t *graphic, uint16_t scanline, int16_t col, uint8_t *objs_idx, uint8_t objs_count) 
  {
     if (graphic == NULL || graphic->mem == NULL) {
         return 0x7FFF;  // Return white (default) if there's an issue
@@ -306,8 +273,7 @@ inline static uint16_t
     return 0x7FFF;  // Default to white
 }
 
-static void 
-gbc_graphic_draw_line(gbc_graphic_t *graphic, uint16_t scanline)
+static void gbc_graphic_draw_line(gbc_graphic_t *graphic, uint16_t scanline)
 {
     if (graphic == NULL || graphic->mem == NULL) {
         return;
@@ -342,8 +308,7 @@ gbc_graphic_draw_line(gbc_graphic_t *graphic, uint16_t scanline)
     }
 }
 
-void 
-gbc_graphic_cycle(gbc_graphic_t *graphic) 
+void gbc_graphic_cycle(gbc_graphic_t *graphic) 
 {
 if (graphic->dots--) {
         return;
