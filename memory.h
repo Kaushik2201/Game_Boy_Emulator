@@ -34,6 +34,13 @@
 #define HRAM_END   0xFFFE
 #define INTERRUPT_ENABLE_REGISTER 0xFFFF
 
+#define RAM_ADDR_MASK 0x1fff   /* 13-bits 8KB */
+#define RAM_ADDR_MASK_SHIFT 13
+
+
+#define ROM_ADDR_MASK 0x3fff   /* 14-bits 16KB */
+#define ROM_ADDR_MASK_SHIFT 14
+
 //IDs
 #define ROM_BANK_0_START_ID 1
 #define ROM_BANK_SWITCH_START_ID 2
