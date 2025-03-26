@@ -1,40 +1,41 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
+
 
 #define MEMORY_MAP_ENTRIES 14
 
-#define ROM_BANK_00_START   0x0000
-#define ROM_BANK_00_END     0x3FFF
+#define ROM_BANK_00_START 0x0000
+#define ROM_BANK_00_END 0x3FFF
 #define ROM_BANK_SWITCH_START 0x4000
-#define ROM_BANK_SWITCH_END   0x7FFF
-#define VRAM_START  0x8000
-#define VRAM_END    0x9FFF
+#define ROM_BANK_SWITCH_END 0x7FFF
+#define VRAM_START 0x8000
+#define VRAM_END 0x9FFF
 #define EXTERNAL_RAM_START 0xA000
-#define EXTERNAL_RAM_END   0xBFFF
+#define EXTERNAL_RAM_END 0xBFFF
 #define WRAM_BANK_0_START 0xC000
-#define WRAM_BANK_0_END   0xCFFF
+#define WRAM_BANK_0_END 0xCFFF
 #define WRAM_BANK_SWITCH_START 0xD000
-#define WRAM_BANK_SWITCH_END   0xDFFF
+#define WRAM_BANK_SWITCH_END 0xDFFF
 #define ECHO_RAM_START 0xE000
-#define ECHO_RAM_END   0xFDFF
-#define OAM_START  0xFE00
-#define OAM_END    0xFE9F
+#define ECHO_RAM_END 0xFDFF
+#define OAM_START 0xFE00
+#define OAM_END 0xFE9F
 #define NON_USABLE_START 0xFEA0
-#define NON_USABLE_END   0xFEFF
+#define NON_USABLE_END 0xFEFF
 #define IO_REGISTERS_START_1 0xFF00
-#define IO_REGISTERS_END_1   0xFF0F
+#define IO_REGISTERS_END_1 0xFF0F
 #define AUDIO_BEGIN 0xFF10
 #define AUDIO_END 0xFF3F
 #define IO_REGISTERS_START_2 0xFF40
 #define IO_REGISTERS_END_2 0xFF7F
 #define HRAM_START 0xFF80
-#define HRAM_END   0xFFFE
+#define HRAM_END 0xFFFE
 #define INTERRUPT_ENABLE_REGISTER 0xFFFF
 
-//IDs
+// IDs
 #define ROM_BANK_0_START_ID 1
 #define ROM_BANK_SWITCH_START_ID 2
 #define VRAM_START_ID 3
@@ -45,11 +46,10 @@
 #define OAM_START_ID 8
 #define NON_USABLE_START_ID 9
 #define IO_REGISTERS_START_ID 10
-#define AUDIO_ID 10
+#define AUDIO_ID 11
 #define IO_REGISTERS_START_ID_2 12
 #define HRAM_START_ID 13
 #define INTERRUPT_ENABLE_REGISTER_ID 14
-
 
 #define VRAM_BANK_SIZE 0x2000
 #define WRAM_BANK_SIZE 0x1000
@@ -100,6 +100,7 @@
 #define IO_PORT_WX 0x4B
 #define IO_PORT_KEY1 0x4D
 #define IO_PORT_VBK 0x4F
+#define IO_PORT_DISABLE_BOOT_ROM 0x50
 #define IO_PORT_HDMA1 0x51
 #define IO_PORT_HDMA2 0x52
 #define IO_PORT_HDMA3 0x53
@@ -116,39 +117,36 @@
 #define IO_PORT_PCM34 0x77
 #define IO_PORT_IE 0x7F
 
-#define GBC_BOOT_ROM_SIZE 0x8ff 
+#define GBC_BOOT_ROM_SIZE 0x8ff
 
-typedef struct
-{
-    uint16_t id;
-    uint16_t addr_begin;
-    uint16_t addr_end;  
-    memory_read read;
-    memory_write write;
-    void *udata;
+typedef struct {
+  uint16_t id;
+  uint16_t addr_begin;
+  uint16_t addr_end;
+  memory_read read;
+  memory_write write;
+  void *udata;
 } memory_map_entry_t;
 
-typedef struct
-{
-    uint16_t c[4];
+typedef struct {
+  uint16_t c[4];
 } gbc_palette_t;
 
-typedef struct
-{
-    memory_read read;
-    memory_write write;
-    memory_map_entry_t map[MEMORY_MAP_ENTRIES];
-    uint8_t wram[WRAM_BANK_SIZE * 8]; /* 8 WRAM banks */
-    uint8_t hraw[HRAM_END - HRAM_START + 1];
+typedef struct {
+  memory_read read;
+  memory_write write;
+  memory_map_entry_t map[MEMORY_MAP_ENTRIES];
+  uint8_t wram[WRAM_BANK_SIZE * 8]; /* 8 WRAM banks */
+  uint8_t hram[HRAM_END - HRAM_START + 1];
 
-    uint8_t io_ports[IO_REGISTERS_END_2 - IO_REGISTERS_START_1 + 1];
-    uint8_t oam[OAM_END - OAM_START + 1];
+  uint8_t io_ports[IO_REGISTERS_END_2 - IO_REGISTERS_START_1 + 1];
+  uint8_t oam[OAM_END - OAM_START + 1];
 
-    gbc_palette_t bg_palette[8];
-    gbc_palette_t obj_palette[8];
+  gbc_palette_t bg_palette[8];
+  gbc_palette_t obj_palette[8];
 
-    uint8_t boot_rom_enabled;
-    uint8_t boot_rom[GBC_BOOT_ROM_SIZE];
+  uint8_t boot_rom_enabled;
+  uint8_t boot_rom[GBC_BOOT_ROM_SIZE];
 } gbc_memory_t;
 
 #define IO_ADDR_PORT(addr) ((addr) - IO_PORT_BASE)
@@ -165,7 +163,7 @@ typedef struct
 
 void mem_init(gbc_memory_t *memory);
 void register_memory_map(gbc_memory_t *mem, memory_map_entry_t *entry);
-void* connect_io_port(gbc_memory_t *mem, uint16_t addr);
+void *connect_io_port(gbc_memory_t *mem, uint16_t addr);
 
 typedef uint8_t (*memory_read)(void *udata, uint16_t addr);
 typedef uint8_t (*memory_write)(void *udata, uint16_t addr, uint8_t data);

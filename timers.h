@@ -16,8 +16,9 @@
 
 #define TAC_MODE_0_CYCLES  1024  // 4096 Hz
 #define TAC_MODE_1_CYCLES  16    // 262144 Hz
-#define TAC_MODE_2_CYCLES  48   // 65536 Hz
+#define TAC_MODE_2_CYCLES  64   // 65536 Hz
 #define TAC_MODE_3_CYCLES  256   // 16384 Hz
+
 
 typedef struct gbc_timer {
     gbc_memory_t *mem;
@@ -35,3 +36,4 @@ void gbc_timer_connect(gbc_timer_t *timer, gbc_memory_t *mem);
 void gbc_timer_cycle(gbc_timer_t *timer);
 
 #endif 
+    
