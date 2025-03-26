@@ -1,75 +1,119 @@
 #include "gbc.h"
 #include "utils.h"
+
+
 int gbc_init(gbc_t *gbc, const char *game_rom, const char *boot_rom) {
+  init_instruction_set();
+  memset(gbc, 0, sizeof(gbc_t));
+
+  gbc_mem_init(&gbc->mem);
   gbc_cpu_init(&gbc->cpu);
-  mem_init(&gbc->mem);
-  gbc_graphic_init(&gbc->graphics);
-  init_instruction_set(&gbc->isa);
   gbc_mbc_init(&gbc->mbc);
-  timer_init();
+  gbc_timer_init(&gbc->timer);
   gbc_io_init(&gbc->io);
+  gbc_graphic_init(&gbc->graphics);
+  gbc_audio_init(&gbc->audio);
 
-  // Connect all components
   gbc_cpu_connect(&gbc->cpu, &gbc->mem);
-  gbc_graphic_connect(&gbc->graphics, &gbc->mem);
   gbc_mbc_connect(&gbc->mbc, &gbc->mem);
-  timer_connect();
+  gbc_timer_connect(&gbc->timer, &gbc->mem);
+  gbc_io_connect(&gbc->io, &gbc->mem);
+  gbc_graphic_connect(&gbc->graphics, &gbc->mem);
+  gbc_audio_connect(&gbc->audio, &gbc->mem);
 
-  FILE *game_rom_file = fopen(game_rom, "rb");
-  if (!game_rom_file) {
-    LOG_ERROR("Failed to open game ROM file: %s\n", game_rom);
-    return -1;
+  FILE *cartridge = fopen(game_rom, "rb");
+
+  if (!cartridge) {
+      LOG_ERROR("Failed to open cartridge\n");
+      return 1;
   }
 
-  // Get the file size of the game ROM
-  fseek(game_rom_file, 0, SEEK_END);
-  long rom_size = ftell(game_rom_file);
-  fseek(game_rom_file, 0, SEEK_SET);
+  fseek(cartridge, 0, SEEK_END);
+  size_t size = ftell(cartridge);
+  rewind(cartridge);
 
-  // Allocate memory and read the ROM data
-  uint8_t *rom_data = (uint8_t *)malloc(rom_size);
-  if (!rom_data) {
-    LOG_ERROR("Failed to allocate memory for game ROM\n");
-    fclose(game_rom_file);
-    return -1;
+  uint8_t *data = (uint8_t*)malloc_memory(size);
+  if (!data) {
+      LOG_ERROR("Failed to allocate memory\n");
+      return 1;
   }
-  fread(rom_data, 1, rom_size, game_rom_file);
-  fclose(game_rom_file);
 
-  // Load the ROM data into the cartridge
-  cartridge_t *cart = cartridge_load(rom_data);
+  size_t n = fread(data, 1, size, cartridge);
+  fclose(cartridge);
+
+  cartridge_t *cart = cartridge_load((uint8_t*)data);
   gbc_mbc_init_with_cart(&gbc->mbc, cart);
-  WRITE_R16(&gbc->cpu.reg, REG_PC, 0x100);
-  if (boot_rom) {
-    bootload(gbc, boot_rom);
-    WRITE_R16(&gbc->cpu.reg, REG_PC, 0x000);
-  } else {
-    LOG_ERROR("No boot ROM provided, skipping boot ROM loading\n");
+  gbc->mbc.rom_banks = data;
+
+  if (!cart) {
+      LOG_ERROR("Failed to load cartridge\n");
+      return 1;
   }
 
+  WRITE_R16(&gbc->cpu, REG_PC, 0x0100);
+
+  /* initial values https://gbdev.io/pandocs/Power_Up_Sequence.html  */
+  IO_PORT_WRITE(&(gbc->mem), IO_PORT_LCDC, 0x91);
+
+  if (boot_rom) {
+      gbc_load_boot_rom(gbc, boot_rom);        /* boot rom starts at 0x0000 */
+      WRITE_R16(&gbc->cpu, REG_PC, 0x0000);
+  }
+
+  gbc->running = 1;
+  gbc->paused = 0;
   return 0;
 };
+
+
 void gbc_run(gbc_t *gbc) {
-  uint64_t prev_frame_time = get_time();
-  uint64_t current_frame_time = 0;
-  while (1) {
-    current_frame_time = get_time();
-    gbc->cpu.cycles = 0;
-    if (current_frame_time - prev_frame_time < FRAME_INTERVAL) {
-      continue;
-    }
-    prev_frame_time = current_frame_time;
-    uint16_t cycles = 0;
-    while (cycles < CYCLES_PER_FRAME) {
-      gbc_cpu_cycle(&gbc->cpu);
-      gbc_graphic_cycle(&gbc->graphics);
-      timer_update(gbc->cpu.cycles);
-      // Handle input (would need to be implemented)
-      // process_input(gbc);
-      cycles++;
-    }
+  uint64_t lastf = get_time(), now = 0, delta = 0;
+  uint64_t cycles = 0;
+
+  for (;;) {
+
+      now = get_time();
+
+      if (now - lastf < FRAME_INTERVAL)
+          continue;
+
+      lastf = now;
+
+      if (!gbc->running)
+          break;
+
+      int frame_cycles = CYCLES_PER_FRAME;
+
+      while (frame_cycles--) {
+          cycles = gbc->cpu.cycles;
+          if (gbc->paused) {
+              if (gbc->debug_steps == 0) {
+                  continue;
+              }
+              /* forwards an instruction */
+              /* TODO: in double speed mode, this is not always a single instruction */
+              if (gbc->debug_steps > 0 && gbc->cpu.ins_cycles <= 1) {
+                  gbc->debug_steps--;
+              }
+          }
+
+          gbc_cpu_cycle(&gbc->cpu);
+          gbc_timer_cycle(&gbc->timer);
+          if (gbc->cpu.dspeed) {
+              /* double speed mode */
+              gbc_cpu_cycle(&gbc->cpu);
+              gbc_timer_cycle(&gbc->timer);
+          }
+          gbc_graphic_cycle(&gbc->graphics);
+          gbc_io_cycle(&gbc->io);
+          gbc_audio_cycle(&gbc->audio);
+      }
+
+      gbc->graphics.screen_update(&gbc->graphics);
+      gbc->audio.audio_update(&gbc->audio);
   }
 }
+
 
 void bootload(gbc_t *gbc, const char *boot_rom_path) {
   // Load the boot ROM into memory

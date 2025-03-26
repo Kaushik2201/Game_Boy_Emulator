@@ -33,6 +33,7 @@ typedef void (*screen_write)(void *udata, uint16_t addr, uint16_t data);
 #define PPU_MODE_2 2    //OAM_SCAN
 #define PPU_MODE_1 1    //VBLANK
 #define PPU_MODE_0 0    //HBLANK
+#define PPU_MODE_MASK 0x03
 
 //Dots per PPU Mode
 #define PPU_MODE_0_DOTS 100

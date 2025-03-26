@@ -8,18 +8,22 @@
 #include "mbc.h"
 #include "memory.h"
 #include "timers.h"
+#include "audio.h"
 
 // A structure to represent the game boy itself, including every part of the
 // system.
 typedef struct {
   gbc_cpu_t cpu;
   gbc_memory_t mem;
-  cartridge_t cart;
   gbc_graphic_t graphics;
-  gbc_instruction_t isa;
   gbc_mbc_t mbc;
   gbc_timer_t timer;
   gbc_io_t io;
+  gbc_audio_t audio;
+
+  uint32_t debug_steps;
+  volatile uint8_t running:1;
+  volatile uint8_t paused:1;
 
 } gbc_t;
 
