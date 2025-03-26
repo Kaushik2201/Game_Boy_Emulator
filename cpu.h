@@ -12,7 +12,7 @@ typedef struct gbc_cpu gbc_cpu_t;
 
 //INTERRUPTS MASKS
 #define INTERRUPT_VBLANK    0x01
-#define INTERRUPT_LCD      0x02
+#define INTERRUPT_LCD_STAT  0x02
 #define INTERRUPT_TIMER     0x04
 #define INTERRUPT_SERIAL    0x08
 #define INTERRUPT_JOYPAD    0x10
